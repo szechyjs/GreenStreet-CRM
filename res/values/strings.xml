@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name">GreenStreet CRM</string>
+
+    <string name="description_logo">GreenStreet CRM</string>
+    <string name="description_home">Home</string>
+    <string name="description_search">Search</string>
+    <string name="description_refresh">Refresh</string>
+    <string name="description_star">Star</string>
+    
+    <string name="title_tagstream">Realtime stream</string>
+    
+    <string name="btn_schedule">Schedule</string>
+    <string name="btn_map">Map</string>
+    <string name="btn_sessions">Sessions</string>
+    <string name="btn_starred">Starred</string>
+    <string name="btn_vendors">Sandbox</string>
+    <string name="btn_announcements">Bulletin</string>
+    
+    <string name="empty_sessions">No sessions found.</string>
+    <string name="empty_session_detail">No session details found.</string>
+    <string name="empty_vendors">No sandbox results found.</string>
+    <string name="empty_search">No search results found.</string>
+    <string name="empty_links">No links available.</string>
+    
+    <string name="session_requirements">Requirements</string>
+    <string name="session_speakers">Speakers</string>
+    
+    <!-- Notes integration -->
+    <string name="notes_catch_powered_by">Notes are powered by <a href="http://www.catch.com/">Catch.com</a>.</string>
+    <string name="notes_catch_market_title">Install Catch Notes</string>
+    <string name="notes_catch_market_subtitle">You can take notes for Google I/O sessions using the latest version of Catch Notes, available from Android Market.</string>
+    <string name="notes_catch_new_title">Create a new note</string>
+    <string name="notes_catch_view_title">View track notes</string>
+    <string name="toast_notes_error_invoking">Couldn\'t start Catch Notes.</string>
+
+</resources>

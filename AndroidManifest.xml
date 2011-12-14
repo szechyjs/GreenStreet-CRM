@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.goliathonline.android.greenstreetcrm"
+    android:versionCode="1"
+    android:versionName="1.0"
+    android:installLocation="auto" >
+
+    <uses-sdk android:minSdkVersion="10"
+        android:targetSdkVersion="13" />
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <application
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/Theme.IOSched"
+        android:hardwareAccelerated="true" >
+        
+        <activity
+            android:label="@string/app_name"
+            android:name=".ui.HomeActivity"
+            android:theme="@style/Theme.IOSched.Home" >
+            <intent-filter >
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        
+        <activity
+            android:name=".ui.BaseSinglePaneActivity"
+            android:label="Single Pane Activity" />
+        <activity
+            android:name=".ui.BaseMultiPaneActivity"
+            android:label="Multi Pane Activity" />
+    </application>
+
+</manifest>
