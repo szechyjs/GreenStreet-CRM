@@ -33,5 +33,7 @@
     <string name="notes_catch_new_title">Create a new note</string>
     <string name="notes_catch_view_title">View track notes</string>
     <string name="toast_notes_error_invoking">Couldn\'t start Catch Notes.</string>
+    
+    <string name="permission_write">Modify GreenStreet CRM data</string>
 
 </resources>

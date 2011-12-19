@@ -1,6 +1,8 @@
 package com.goliathonline.android.greenstreetcrm.ui;
 
 import com.goliathonline.android.greenstreetcrm.R;
+import com.goliathonline.android.greenstreetcrm.provider.CustomerContract;
+import com.goliathonline.android.greenstreetcrm.ui.tablet.CustomersMultiPaneActivity;
 import com.goliathonline.android.greenstreetcrm.util.UIUtils;
 
 import android.content.Intent;
@@ -49,10 +51,12 @@ public class DashboardFragment extends Fragment {
         root.findViewById(R.id.home_btn_vendors).setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 // Launch vendors list
-                if (UIUtils.isHoneycombTablet(getActivity())) {
-                    startActivity(new Intent(getActivity(), BaseMultiPaneActivity.class));
+            	if (UIUtils.isHoneycombTablet(getActivity())) {
+                    startActivity(new Intent(getActivity(), CustomersMultiPaneActivity.class));
                 } else {
-                    startActivity(new Intent(getActivity(), BaseSinglePaneActivity.class));
+                    final Intent intent = new Intent(Intent.ACTION_VIEW,
+                            CustomerContract.Customers.CONTENT_URI);
+                    startActivity(intent);
                 }
             }
         });

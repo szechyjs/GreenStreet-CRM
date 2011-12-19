@@ -1,0 +1,23 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="?android:attr/listPreferredItemHeight"
+    style="@style/ListItemContainer">
+
+    <ImageView android:id="@+id/star_button"
+        android:layout_gravity="top|right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/indicator_starred" />
+
+    <FrameLayout android:id="@+id/list_item_vendor"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        style="@style/ListItemContent">
+
+        <TextView android:id="@+id/vendor_name"
+            android:layout_gravity="center_vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            style="@style/ListItemTitle" />
+    </FrameLayout>
+</FrameLayout>
