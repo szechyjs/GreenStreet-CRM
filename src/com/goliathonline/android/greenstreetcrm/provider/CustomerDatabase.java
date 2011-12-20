@@ -1,14 +1,11 @@
 package com.goliathonline.android.greenstreetcrm.provider;
 
-import com.goliathonline.android.greenstreetcrm.provider.CustomerContract.Customers;
 import com.goliathonline.android.greenstreetcrm.provider.CustomerContract.CustomersColumns;
 import com.goliathonline.android.greenstreetcrm.provider.CustomerContract.SyncColumns;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.net.Uri;
 import android.provider.BaseColumns;
 import android.util.Log;
 
@@ -24,7 +21,7 @@ public class CustomerDatabase extends SQLiteOpenHelper {
     // NOTE: carefully update onUpgrade() when bumping database versions to make
     // sure user data is saved.
 
-    private static final int VER_LAUNCH = 1;
+    private static final int VER_LAUNCH = 2;
 
     private static final int DATABASE_VERSION = VER_LAUNCH;
 
