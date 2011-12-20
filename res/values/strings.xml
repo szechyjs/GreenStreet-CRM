@@ -7,6 +7,7 @@
     <string name="description_search">Search</string>
     <string name="description_refresh">Refresh</string>
     <string name="description_star">Star</string>
+    <string name="description_add">Add</string>
     
     <string name="title_tagstream">Realtime stream</string>
     
@@ -14,14 +15,21 @@
     <string name="btn_map">Map</string>
     <string name="btn_sessions">Sessions</string>
     <string name="btn_starred">Starred</string>
-    <string name="btn_vendors">Sandbox</string>
+    <string name="btn_customers">Customers</string>
     <string name="btn_announcements">Bulletin</string>
     
     <string name="empty_sessions">No sessions found.</string>
     <string name="empty_session_detail">No session details found.</string>
-    <string name="empty_vendors">No sandbox results found.</string>
+    <string name="empty_customers">No customers found.</string>
     <string name="empty_search">No search results found.</string>
     <string name="empty_links">No links available.</string>
+    
+    <string name="hint_first">First</string>
+    <string name="hint_last">Last</string>
+    <string name="hint_street">Street</string>
+    <string name="hint_city">City</string>
+    <string name="hint_state">State</string>
+    <string name="hint_zip">Zip</string>
     
     <string name="session_requirements">Requirements</string>
     <string name="session_speakers">Speakers</string>
