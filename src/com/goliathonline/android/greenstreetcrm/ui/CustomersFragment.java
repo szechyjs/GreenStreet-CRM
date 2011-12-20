@@ -2,7 +2,6 @@ package com.goliathonline.android.greenstreetcrm.ui;
 
 import com.goliathonline.android.greenstreetcrm.R;
 import com.goliathonline.android.greenstreetcrm.provider.CustomerContract;
-import com.goliathonline.android.greenstreetcrm.util.ActivityHelper;
 import com.goliathonline.android.greenstreetcrm.util.NotifyingAsyncQueryHandler;
 import com.goliathonline.android.greenstreetcrm.util.UIUtils;
 
@@ -97,7 +96,7 @@ public class CustomersFragment extends ListFragment implements
         if (!mHasSetEmptyText) {
             // Could be a bug, but calling this twice makes it become visible when it shouldn't
             // be visible.
-            setEmptyText(getString(R.string.empty_vendors));
+            setEmptyText(getString(R.string.empty_customers));
             mHasSetEmptyText = true;
         }
     }

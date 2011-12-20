@@ -8,6 +8,7 @@
     <string name="description_refresh">Refresh</string>
     <string name="description_star">Star</string>
     <string name="description_add">Add</string>
+    <string name="description_save">Save</string>
     
     <string name="title_tagstream">Realtime stream</string>
     

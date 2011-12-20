@@ -9,7 +9,11 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -29,14 +33,14 @@ public class CustomerEditFragment extends Fragment implements
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        setHasOptionsMenu(true);
+        
         final Intent intent = BaseActivity.fragmentArgumentsToIntent(getArguments());
         mCustomerUri = intent.getData();
         if (mCustomerUri== null) {
             // Do something for new customer here.
         	return;
         }
-
-        setHasOptionsMenu(true);
     }
 	
 	@Override
@@ -62,7 +66,25 @@ public class CustomerEditFragment extends Fragment implements
         return mRootView;
     }
 	
-	
+	@Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.save_menu_items, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.menu_save:
+           	
+            	final FragmentTransaction ft = getFragmentManager().beginTransaction();
+            	ft.replace(getId(), new CustomerDetailFragment(), "customer_edit");
+            	ft.commit();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 	
 	/**
      * {@inheritDoc}
