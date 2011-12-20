@@ -22,29 +22,29 @@ public class DashboardFragment extends Fragment {
         // Attach event handlers
         root.findViewById(R.id.home_btn_schedule).setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                if (UIUtils.isHoneycombTablet(getActivity())) {
-                    startActivity(new Intent(getActivity(), BaseMultiPaneActivity.class));
-                } else {
-                    startActivity(new Intent(getActivity(), BaseSinglePaneActivity.class));
-                }
+//                if (UIUtils.isHoneycombTablet(getActivity())) {
+//                    startActivity(new Intent(getActivity(), BaseMultiPaneActivity.class));
+//                } else {
+//                    startActivity(new Intent(getActivity(), BaseSinglePaneActivity.class));
+//                }
             }
         });
 
         root.findViewById(R.id.home_btn_sessions).setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 // Launch sessions list
-                if (UIUtils.isHoneycombTablet(getActivity())) {
-                    startActivity(new Intent(getActivity(), BaseMultiPaneActivity.class));
-                } else {
-                    startActivity(new Intent(getActivity(), BaseSinglePaneActivity.class));
-                }
+//                if (UIUtils.isHoneycombTablet(getActivity())) {
+//                    startActivity(new Intent(getActivity(), BaseMultiPaneActivity.class));
+//                } else {
+//                    startActivity(new Intent(getActivity(), BaseSinglePaneActivity.class));
+//                }
             }
         });
 
         root.findViewById(R.id.home_btn_starred).setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 // Launch list of sessions and vendors the user has starred
-                startActivity(new Intent(getActivity(), BaseSinglePaneActivity.class));                
+//                startActivity(new Intent(getActivity(), BaseSinglePaneActivity.class));                
             }
         });
 
@@ -64,11 +64,11 @@ public class DashboardFragment extends Fragment {
         root.findViewById(R.id.home_btn_map).setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 // Launch map of conference venue
-            	if (UIUtils.isHoneycombTablet(getActivity())) {
-                    startActivity(new Intent(getActivity(), BaseMultiPaneActivity.class));
-                } else {
-                    startActivity(new Intent(getActivity(), BaseSinglePaneActivity.class));
-                }
+//            	if (UIUtils.isHoneycombTablet(getActivity())) {
+//                    startActivity(new Intent(getActivity(), BaseMultiPaneActivity.class));
+//                } else {
+//                    startActivity(new Intent(getActivity(), BaseSinglePaneActivity.class));
+//                }
             }
         });
 
@@ -76,8 +76,8 @@ public class DashboardFragment extends Fragment {
                 new View.OnClickListener() {
                     public void onClick(View view) {
                         // splicing in tag streamer
-                        Intent intent = new Intent(getActivity(), BaseSinglePaneActivity.class);
-                        startActivity(intent);
+//                        Intent intent = new Intent(getActivity(), BaseSinglePaneActivity.class);
+//                        startActivity(intent);
                     }
                 });
 
