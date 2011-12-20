@@ -4,6 +4,7 @@ import com.goliathonline.android.greenstreetcrm.R;
 import com.goliathonline.android.greenstreetcrm.provider.CustomerContract;
 import com.goliathonline.android.greenstreetcrm.util.ActivityHelper;
 import com.goliathonline.android.greenstreetcrm.util.NotifyingAsyncQueryHandler;
+import com.goliathonline.android.greenstreetcrm.util.UIUtils;
 
 import android.content.Context;
 import android.content.Intent;
@@ -13,16 +14,16 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.BaseColumns;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
-import android.text.Spannable;
-import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CursorAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-
-import static com.goliathonline.android.greenstreetcrm.util.UIUtils.buildStyledSnippet;
 
 /**
  * A {@link ListFragment} showing a list of sandbox comapnies.
@@ -44,6 +45,8 @@ public class CustomersFragment extends ListFragment implements
         super.onCreate(savedInstanceState);
         mHandler = new NotifyingAsyncQueryHandler(getActivity().getContentResolver(), this);
         reloadFromArguments(getArguments());
+        
+        setHasOptionsMenu(true);
     }
 
     public void reloadFromArguments(Bundle arguments) {
@@ -153,6 +156,29 @@ public class CustomersFragment extends ListFragment implements
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(STATE_CHECKED_POSITION, mCheckedPosition);
+    }
+    
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.add_menu_items, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.menu_add:
+           	
+            	final FragmentTransaction ft = getFragmentManager().beginTransaction();
+            	if (UIUtils.isHoneycombTablet(getActivity()))
+            		ft.replace(R.id.fragment_container_customer_detail, new CustomerEditFragment(), "customer_edit");
+            	else
+            		ft.replace(getId(), new CustomerEditFragment(), "customer_edit");
+            	ft.commit();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     /** {@inheritDoc} */

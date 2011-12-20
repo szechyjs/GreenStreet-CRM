@@ -8,6 +8,7 @@
     <item type="id" name="fragment_session_detail" />
     <item type="id" name="fragment_customers" />
     <item type="id" name="fragment_customer_detail" />
+    <item type="id" name="fragment_customer_edit" />
 
     <item type="id" name="menu_refresh_progress" />
 
