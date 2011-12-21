@@ -1,0 +1,1 @@
+XCOPY C:\Users\Jared\workspace\GreenStreetCRM\bin\*.apk C:\Users\Jared\Dropbox\GreenStreet-CRM\ /C /D /Y
