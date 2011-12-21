@@ -100,10 +100,7 @@ public class UIUtils {
         return isHoneycomb() && isTablet(context);
     }
 
-    public static long getCurrentTime(final Context context) {
-        //SharedPreferences prefs = context.getSharedPreferences("mock_data", 0);
-        //prefs.edit().commit();
-        //return prefs.getLong("mock_current_time", System.currentTimeMillis());
+    public static long getCurrentTime() {
         return System.currentTimeMillis();
     }
 

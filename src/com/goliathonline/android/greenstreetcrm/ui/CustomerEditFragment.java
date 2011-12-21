@@ -117,7 +117,7 @@ public class CustomerEditFragment extends Fragment implements
                 values.put(Customers.CUSTOMER_PHONE, mPhone.getText().toString());
                 values.put(Customers.CUSTOMER_MOBILE, mMobile.getText().toString());
                 values.put(Customers.CUSTOMER_EMAIL, mEmail.getText().toString());
-                values.put(SyncColumns.UPDATED, "test");
+                values.put(SyncColumns.UPDATED, UIUtils.getCurrentTime());
                 Uri uri = getActivity().getContentResolver().insert(Customers.CONTENT_URI, values);
             	
                 CustomerDetailFragment fg = new CustomerDetailFragment();
