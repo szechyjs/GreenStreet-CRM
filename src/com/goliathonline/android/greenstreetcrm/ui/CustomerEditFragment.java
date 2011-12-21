@@ -137,7 +137,6 @@ public class CustomerEditFragment extends Fragment implements
                     startActivity(intent);
                     getActivity().finish();
             	}
-  	
                 return true;
         }
         return super.onOptionsItemSelected(item);
