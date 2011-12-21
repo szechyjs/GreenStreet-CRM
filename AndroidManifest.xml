@@ -55,6 +55,8 @@
             </intent-filter>
         </activity>
         
+        <activity android:name=".ui.phone.CustomerEditActivity" />
+        
         <!-- Tablet-only activities -->
         
         <activity

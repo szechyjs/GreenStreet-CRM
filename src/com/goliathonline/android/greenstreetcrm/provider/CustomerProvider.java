@@ -95,12 +95,13 @@ public class CustomerProvider extends ContentProvider {
     public Uri insert(Uri uri, ContentValues values) {
         if (LOGV) Log.v(TAG, "insert(uri=" + uri + ", values=" + values.toString() + ")");
         final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
+        long retId;
         final int match = sUriMatcher.match(uri);
         switch (match) {
             case CUSTOMERS: {
-                db.insertOrThrow(Tables.CUSTOMERS, null, values);
+                retId = db.insertOrThrow(Tables.CUSTOMERS, null, values);
                 getContext().getContentResolver().notifyChange(uri, null);
-                return Customers.buildCustomerUri(values.getAsString(BaseColumns._ID));
+                return Customers.buildCustomerUri(String.valueOf(retId));
             }
             default: {
                 throw new UnsupportedOperationException("Unknown uri: " + uri);

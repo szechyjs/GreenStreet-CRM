@@ -116,7 +116,7 @@ public class CustomerDetailFragment extends Fragment implements
                 return;
             }
 
-            mNameString = cursor.getString(VendorsQuery.NAME);
+            mNameString = cursor.getString(VendorsQuery.LASTNAME) + ", " + cursor.getString(VendorsQuery.FIRSTNAME);
             mName.setText(mNameString);
 
             // Unregister around setting checked state to avoid triggering
@@ -125,9 +125,9 @@ public class CustomerDetailFragment extends Fragment implements
             mStarred.setChecked(cursor.getInt(VendorsQuery.STARRED) != 0);
             mStarred.setOnCheckedChangeListener(this);
 
-            mUrl.setText(cursor.getString(VendorsQuery.URL));
-            mDesc.setText(cursor.getString(VendorsQuery.DESC));
-            mProductDesc.setText(cursor.getString(VendorsQuery.PRODUCT_DESC));
+            mUrl.setText(cursor.getString(VendorsQuery.EMAIL));
+            mDesc.setText(cursor.getString(VendorsQuery.ADDRESS));
+            mProductDesc.setText(cursor.getString(VendorsQuery.CITY));
 
         } finally {
             cursor.close();
@@ -149,6 +149,7 @@ public class CustomerDetailFragment extends Fragment implements
     private interface VendorsQuery {
         String[] PROJECTION = {
                 CustomerContract.Customers.CUSTOMER_LASTNAME,
+                CustomerContract.Customers.CUSTOMER_FIRSTNAME,
                 CustomerContract.Customers.CUSTOMER_CITY,
                 CustomerContract.Customers.CUSTOMER_ADDRESS,
                 CustomerContract.Customers.CUSTOMER_EMAIL,
@@ -157,12 +158,13 @@ public class CustomerDetailFragment extends Fragment implements
                 CustomerContract.Customers.CUSTOMER_STARRED,
         };
 
-        int NAME = 0;
-        int LOCATION = 1;
-        int DESC = 2;
-        int URL = 3;
-        int PRODUCT_DESC = 4;
-        int LOGO_URL = 5;
-        int STARRED = 6;
+        int LASTNAME = 0;
+        int FIRSTNAME = 1;
+        int CITY = 2;
+        int ADDRESS = 3;
+        int EMAIL = 4;
+        int PHONE = 5;
+        int MOBILE = 6;
+        int STARRED = 7;
     }
 }

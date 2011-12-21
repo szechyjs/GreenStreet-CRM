@@ -2,6 +2,7 @@ package com.goliathonline.android.greenstreetcrm.ui;
 
 import com.goliathonline.android.greenstreetcrm.R;
 import com.goliathonline.android.greenstreetcrm.provider.CustomerContract;
+import com.goliathonline.android.greenstreetcrm.ui.phone.CustomerEditActivity;
 import com.goliathonline.android.greenstreetcrm.util.NotifyingAsyncQueryHandler;
 import com.goliathonline.android.greenstreetcrm.util.UIUtils;
 
@@ -169,12 +170,17 @@ public class CustomersFragment extends ListFragment implements
         switch (item.getItemId()) {
             case R.id.menu_add:
            	
-            	final FragmentTransaction ft = getFragmentManager().beginTransaction();
             	if (UIUtils.isHoneycombTablet(getActivity()))
-            		ft.replace(R.id.fragment_container_customer_detail, new CustomerEditFragment(), "customer_edit");
+            	{
+            		final FragmentTransaction ft = getFragmentManager().beginTransaction();
+            		ft.replace(R.id.fragment_container_customer_detail, new CustomerEditFragment());
+            		ft.commit();
+            	}
             	else
-            		ft.replace(getId(), new CustomerEditFragment(), "customer_edit");
-            	ft.commit();
+            	{
+            		//ft.replace(getId(), new CustomerEditFragment());
+            		startActivity(new Intent(getActivity(), CustomerEditActivity.class));
+            	}
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -220,7 +226,8 @@ public class CustomersFragment extends ListFragment implements
         @Override
         public void bindView(View view, Context context, Cursor cursor) {
             ((TextView) view.findViewById(R.id.vendor_name)).setText(
-                    cursor.getString(CustomersQuery.NAME));
+                    cursor.getString(CustomersQuery.LASTNAME) + ", "
+                    + cursor.getString(CustomersQuery.FIRSTNAME));
 
             final boolean starred = cursor.getInt(CustomersQuery.STARRED) != 0;
             view.findViewById(R.id.star_button).setVisibility(
@@ -247,14 +254,14 @@ public class CustomersFragment extends ListFragment implements
                 BaseColumns._ID,
                 CustomerContract.Customers.CUSTOMER_ID,
                 CustomerContract.Customers.CUSTOMER_LASTNAME,
-                CustomerContract.Customers.CUSTOMER_CITY,
+                CustomerContract.Customers.CUSTOMER_FIRSTNAME,
                 CustomerContract.Customers.CUSTOMER_STARRED,
         };
 
         int _ID = 0;
         int CUSTOMER_ID = 1;
-        int NAME = 2;
-        int LOCATION = 3;
+        int LASTNAME = 2;
+        int FIRSTNAME = 3;
         int STARRED = 4;
     }
 }

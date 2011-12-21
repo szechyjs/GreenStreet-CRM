@@ -2,8 +2,13 @@ package com.goliathonline.android.greenstreetcrm.ui;
 
 import com.goliathonline.android.greenstreetcrm.R;
 import com.goliathonline.android.greenstreetcrm.provider.CustomerContract;
+import com.goliathonline.android.greenstreetcrm.provider.CustomerContract.Customers;
+import com.goliathonline.android.greenstreetcrm.provider.CustomerContract.SyncColumns;
 import com.goliathonline.android.greenstreetcrm.util.NotifyingAsyncQueryHandler;
+import com.goliathonline.android.greenstreetcrm.util.UIUtils;
 
+import android.content.ContentProviderOperation;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -16,6 +21,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 public class CustomerEditFragment extends Fragment implements
 		NotifyingAsyncQueryHandler.AsyncQueryListener {
@@ -24,6 +30,17 @@ public class CustomerEditFragment extends Fragment implements
 	private Uri mCustomerUri;
 	
 	private ViewGroup mRootView;
+	
+	private EditText mLastName;
+	private EditText mFirstName;
+	private EditText mCompany;
+	private EditText mAddress;
+	private EditText mCity;
+	private EditText mState;
+	private EditText mZipcode;
+	private EditText mPhone;
+	private EditText mMobile;
+	private EditText mEmail;
 	
 	private NotifyingAsyncQueryHandler mHandler;
 	
@@ -77,10 +94,50 @@ public class CustomerEditFragment extends Fragment implements
 
         switch (item.getItemId()) {
             case R.id.menu_save:
-           	
-            	final FragmentTransaction ft = getFragmentManager().beginTransaction();
-            	ft.replace(getId(), new CustomerDetailFragment(), "customer_edit");
-            	ft.commit();
+            	
+            	mFirstName = (EditText) mRootView.findViewById(R.id.firstName);
+            	mLastName = (EditText) mRootView.findViewById(R.id.lastName);
+            	mCompany = (EditText) mRootView.findViewById(R.id.company);
+            	mAddress = (EditText) mRootView.findViewById(R.id.address);
+            	mCity = (EditText) mRootView.findViewById(R.id.city);
+            	mState = (EditText) mRootView.findViewById(R.id.state);
+            	mZipcode = (EditText) mRootView.findViewById(R.id.zipcode);
+            	mPhone = (EditText) mRootView.findViewById(R.id.phone);
+            	mMobile = (EditText) mRootView.findViewById(R.id.mobile);
+            	mEmail = (EditText) mRootView.findViewById(R.id.email);
+            	       	
+            	ContentValues values = new ContentValues();
+                values.put(Customers.CUSTOMER_LASTNAME, mLastName.getText().toString());
+                values.put(Customers.CUSTOMER_FIRSTNAME, mFirstName.getText().toString());
+                values.put(Customers.CUSTOMER_COMPANY, mCompany.getText().toString());
+                values.put(Customers.CUSTOMER_ADDRESS, mAddress.getText().toString());
+                values.put(Customers.CUSTOMER_CITY, mCity.getText().toString());
+                values.put(Customers.CUSTOMER_ZIPCODE, mZipcode.getText().toString());
+                values.put(Customers.CUSTOMER_STATE, mState.getText().toString());
+                values.put(Customers.CUSTOMER_PHONE, mPhone.getText().toString());
+                values.put(Customers.CUSTOMER_MOBILE, mMobile.getText().toString());
+                values.put(Customers.CUSTOMER_EMAIL, mEmail.getText().toString());
+                values.put(SyncColumns.UPDATED, "test");
+                Uri uri = getActivity().getContentResolver().insert(Customers.CONTENT_URI, values);
+            	
+                CustomerDetailFragment fg = new CustomerDetailFragment();
+                Bundle args = new Bundle();
+                args.putParcelable("_uri", uri);
+                fg.setArguments(args);
+                
+                if (UIUtils.isHoneycombTablet(getActivity()))
+                {
+                	final FragmentTransaction ft = getFragmentManager().beginTransaction();
+            		ft.replace(R.id.fragment_container_customer_detail, fg);
+            		ft.commit();
+                }
+            	else
+            	{
+            		final Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                    startActivity(intent);
+                    getActivity().finish();
+            	}
+  	
                 return true;
         }
         return super.onOptionsItemSelected(item);
