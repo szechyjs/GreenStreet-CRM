@@ -2,11 +2,16 @@ package com.goliathonline.android.greenstreetcrm.ui;
 
 import com.goliathonline.android.greenstreetcrm.R;
 import com.goliathonline.android.greenstreetcrm.provider.CustomerContract;
+import com.goliathonline.android.greenstreetcrm.provider.CustomerContract.Customers;
 import com.goliathonline.android.greenstreetcrm.ui.phone.CustomerEditActivity;
 import com.goliathonline.android.greenstreetcrm.util.NotifyingAsyncQueryHandler;
 import com.goliathonline.android.greenstreetcrm.util.UIUtils;
 
+import android.app.AlertDialog;
+import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
+
 import android.content.Intent;
 import android.database.ContentObserver;
 import android.database.Cursor;
@@ -16,11 +21,15 @@ import android.os.Handler;
 import android.provider.BaseColumns;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.CursorAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -134,6 +143,7 @@ public class CustomersFragment extends ListFragment implements
         if (mCheckedPosition >= 0 && getView() != null) {
             getListView().setItemChecked(mCheckedPosition, true);
         }
+        registerForContextMenu(getListView());
     }
 
     @Override
@@ -198,6 +208,49 @@ public class CustomersFragment extends ListFragment implements
 
         getListView().setItemChecked(position, true);
         mCheckedPosition = position;
+    }
+    
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
+    	super.onCreateContextMenu(menu, v, menuInfo);
+    	MenuInflater inflater = getActivity().getMenuInflater();
+    	inflater.inflate(R.menu.context_customers, menu);
+    }
+    
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+      AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
+      switch (item.getItemId()) {
+      case R.id.edit:
+        //editNote(info.id);
+        return true;
+      case R.id.delete:
+    	  final Cursor cursor = (Cursor)mAdapter.getItem(info.position);
+          final String customerId = cursor.getString(CustomersQuery._ID);
+          final Uri customerUri = CustomerContract.Customers.buildCustomerUri(customerId);
+          
+          AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+          builder.setMessage("Are you sure you want to delete?")
+      	       .setCancelable(false)
+      	       .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+      	           public void onClick(DialogInterface dialog, int id) {
+      	        	 int ret = getActivity().getContentResolver().delete(customerUri, null, null);
+      	        	 dialog.dismiss();
+      	           }
+      	       })
+      	       .setNegativeButton("No", new DialogInterface.OnClickListener() {
+      	           public void onClick(DialogInterface dialog, int id) {
+      	                dialog.cancel();
+      	           }
+      	       });
+          AlertDialog alert = builder.create();
+          alert.show();
+      	
+          
+          return true;
+      default:
+        return super.onContextItemSelected(item);
+      }
     }
 
     public void clearCheckedPosition() {
