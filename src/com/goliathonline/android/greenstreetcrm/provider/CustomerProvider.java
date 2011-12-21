@@ -100,7 +100,7 @@ public class CustomerProvider extends ContentProvider {
             case CUSTOMERS: {
                 db.insertOrThrow(Tables.CUSTOMERS, null, values);
                 getContext().getContentResolver().notifyChange(uri, null);
-                return Customers.buildCustomerUri(values.getAsString(Customers.CUSTOMER_ID));
+                return Customers.buildCustomerUri(values.getAsString(BaseColumns._ID));
             }
             default: {
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
@@ -168,7 +168,7 @@ public class CustomerProvider extends ContentProvider {
             case CUSTOMERS_ID: {
                 final String customerId = Customers.getCustomerId(uri);
                 return builder.table(Tables.CUSTOMERS)
-                        .where(Customers.CUSTOMER_ID + "=?", customerId);
+                        .where(BaseColumns._ID + "=?", customerId);
             }
             default: {
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
@@ -190,7 +190,7 @@ public class CustomerProvider extends ContentProvider {
             case CUSTOMERS_ID: {
                 final String customerId = Customers.getCustomerId(uri);
                 return builder.table(Tables.CUSTOMERS)
-                        .where(Customers.CUSTOMER_ID + "=?", customerId);
+                        .where(BaseColumns._ID + "=?", customerId);
             }
             default: {
                 throw new UnsupportedOperationException("Unknown uri: " + uri);

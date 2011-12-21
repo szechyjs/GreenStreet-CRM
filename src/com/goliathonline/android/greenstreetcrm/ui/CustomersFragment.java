@@ -185,7 +185,7 @@ public class CustomersFragment extends ListFragment implements
     public void onListItemClick(ListView l, View v, int position, long id) {
         // Launch viewer for specific vendor.
         final Cursor cursor = (Cursor)mAdapter.getItem(position);
-        final String vendorId = cursor.getString(CustomersQuery.CUSTOMER_ID);
+        final String vendorId = cursor.getString(CustomersQuery._ID);
         final Uri vendorUri = CustomerContract.Customers.buildCustomerUri(vendorId);
         ((BaseActivity) getActivity()).openActivityOrFragment(new Intent(Intent.ACTION_VIEW,
                 vendorUri));

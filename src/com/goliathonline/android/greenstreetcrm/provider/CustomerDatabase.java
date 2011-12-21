@@ -22,8 +22,9 @@ public class CustomerDatabase extends SQLiteOpenHelper {
     // sure user data is saved.
 
     private static final int VER_LAUNCH = 2;
+    private static final int VER_CHANGE_CUST_ID = 3;
 
-    private static final int DATABASE_VERSION = VER_LAUNCH;
+    private static final int DATABASE_VERSION = VER_CHANGE_CUST_ID;
 
     interface Tables {
         String CUSTOMERS = "customers";
@@ -39,7 +40,7 @@ public class CustomerDatabase extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE " + Tables.CUSTOMERS + " ("
                 + BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + SyncColumns.UPDATED + " INTEGER NOT NULL,"
-                + CustomersColumns.CUSTOMER_ID + " TEXT NOT NULL,"
+                + CustomersColumns.CUSTOMER_ID + " TEXT,"
                 + CustomersColumns.CUSTOMER_LASTNAME + " TEXT,"
                 + CustomersColumns.CUSTOMER_FIRSTNAME + " TEXT,"
                 + CustomersColumns.CUSTOMER_COMPANY + " TEXT,"
@@ -50,8 +51,8 @@ public class CustomerDatabase extends SQLiteOpenHelper {
                 + CustomersColumns.CUSTOMER_PHONE + " TEXT,"
                 + CustomersColumns.CUSTOMER_MOBILE + " TEXT,"
                 + CustomersColumns.CUSTOMER_EMAIL+ " TEXT,"
-                + CustomersColumns.CUSTOMER_STARRED + " INTEGER NOT NULL DEFAULT 0,"
-                + "UNIQUE (" + CustomersColumns.CUSTOMER_ID + ") ON CONFLICT REPLACE)");
+                + CustomersColumns.CUSTOMER_STARRED + " INTEGER NOT NULL DEFAULT 0)");
+
         
         db.execSQL("INSERT INTO " + Tables.CUSTOMERS + "("
     			+ SyncColumns.UPDATED + ","
