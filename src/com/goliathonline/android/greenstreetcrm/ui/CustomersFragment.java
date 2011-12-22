@@ -220,15 +220,32 @@ public class CustomersFragment extends ListFragment implements
     @Override
     public boolean onContextItemSelected(MenuItem item) {
       AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
+      
+      final Cursor cursor = (Cursor)mAdapter.getItem(info.position);
+      final String customerId = cursor.getString(CustomersQuery._ID);
+      final Uri customerUri = CustomerContract.Customers.buildCustomerUri(customerId);
+      
       switch (item.getItemId()) {
       case R.id.edit:
-        //editNote(info.id);
+    	  CustomerEditFragment fg = new CustomerEditFragment();
+          Bundle args = new Bundle();
+          args.putParcelable("_uri", customerUri);
+          fg.setArguments(args);
+          
+          if (UIUtils.isHoneycombTablet(getActivity()))
+          {
+          	final FragmentTransaction ft = getFragmentManager().beginTransaction();
+      		ft.replace(R.id.fragment_container_customer_detail, fg);
+      		ft.commit();
+          }
+      	else
+      	{
+      		final Intent intent = new Intent(Intent.ACTION_VIEW, customerUri, getActivity().getBaseContext(), CustomerEditActivity.class);
+      		//intent.putExtra("_uri", customerUri);
+              startActivity(intent);
+      	}
         return true;
       case R.id.delete:
-    	  final Cursor cursor = (Cursor)mAdapter.getItem(info.position);
-          final String customerId = cursor.getString(CustomersQuery._ID);
-          final Uri customerUri = CustomerContract.Customers.buildCustomerUri(customerId);
-          
           AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
           builder.setMessage("Are you sure you want to delete?")
       	       .setCancelable(false)

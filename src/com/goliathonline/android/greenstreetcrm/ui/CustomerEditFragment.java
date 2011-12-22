@@ -79,6 +79,16 @@ public class CustomerEditFragment extends Fragment implements
             Bundle savedInstanceState) {
 
         mRootView = (ViewGroup) inflater.inflate(R.layout.fragment_customer_edit, null);
+    	mFirstName = (EditText) mRootView.findViewById(R.id.firstName);
+    	mLastName = (EditText) mRootView.findViewById(R.id.lastName);
+    	mCompany = (EditText) mRootView.findViewById(R.id.company);
+    	mAddress = (EditText) mRootView.findViewById(R.id.address);
+    	mCity = (EditText) mRootView.findViewById(R.id.city);
+    	mState = (EditText) mRootView.findViewById(R.id.state);
+    	mZipcode = (EditText) mRootView.findViewById(R.id.zipcode);
+    	mPhone = (EditText) mRootView.findViewById(R.id.phone);
+    	mMobile = (EditText) mRootView.findViewById(R.id.mobile);
+    	mEmail = (EditText) mRootView.findViewById(R.id.email);
 
         return mRootView;
     }
@@ -95,17 +105,6 @@ public class CustomerEditFragment extends Fragment implements
         switch (item.getItemId()) {
             case R.id.menu_save:
             	
-            	mFirstName = (EditText) mRootView.findViewById(R.id.firstName);
-            	mLastName = (EditText) mRootView.findViewById(R.id.lastName);
-            	mCompany = (EditText) mRootView.findViewById(R.id.company);
-            	mAddress = (EditText) mRootView.findViewById(R.id.address);
-            	mCity = (EditText) mRootView.findViewById(R.id.city);
-            	mState = (EditText) mRootView.findViewById(R.id.state);
-            	mZipcode = (EditText) mRootView.findViewById(R.id.zipcode);
-            	mPhone = (EditText) mRootView.findViewById(R.id.phone);
-            	mMobile = (EditText) mRootView.findViewById(R.id.mobile);
-            	mEmail = (EditText) mRootView.findViewById(R.id.email);
-            	       	
             	ContentValues values = new ContentValues();
                 values.put(Customers.CUSTOMER_LASTNAME, mLastName.getText().toString());
                 values.put(Customers.CUSTOMER_FIRSTNAME, mFirstName.getText().toString());
@@ -118,11 +117,15 @@ public class CustomerEditFragment extends Fragment implements
                 values.put(Customers.CUSTOMER_MOBILE, mMobile.getText().toString());
                 values.put(Customers.CUSTOMER_EMAIL, mEmail.getText().toString());
                 values.put(SyncColumns.UPDATED, UIUtils.getCurrentTime());
-                Uri uri = getActivity().getContentResolver().insert(Customers.CONTENT_URI, values);
+
+                if (mCustomerUri == null)
+                	mCustomerUri = getActivity().getContentResolver().insert(Customers.CONTENT_URI, values);
+                else
+                	getActivity().getContentResolver().update(mCustomerUri, values, null, null);
             	
                 CustomerDetailFragment fg = new CustomerDetailFragment();
                 Bundle args = new Bundle();
-                args.putParcelable("_uri", uri);
+                args.putParcelable("_uri", mCustomerUri);
                 fg.setArguments(args);
                 
                 if (UIUtils.isHoneycombTablet(getActivity()))
@@ -133,7 +136,7 @@ public class CustomerEditFragment extends Fragment implements
                 }
             	else
             	{
-            		final Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+            		final Intent intent = new Intent(Intent.ACTION_VIEW, mCustomerUri);
                     startActivity(intent);
                     getActivity().finish();
             	}
@@ -155,7 +158,16 @@ public class CustomerEditFragment extends Fragment implements
                 return;
             }
 
-            mNameString = cursor.getString(CustomersQuery.LASTNAME);
+            mLastName.setText(cursor.getString(CustomersQuery.LASTNAME));
+            mFirstName.setText(cursor.getString(CustomersQuery.FIRSTNAME));
+            mCompany.setText(cursor.getString(CustomersQuery.COMPANY));
+            mAddress.setText(cursor.getString(CustomersQuery.ADDRESS));
+            mCity.setText(cursor.getString(CustomersQuery.CITY));
+            mState.setText(cursor.getString(CustomersQuery.STATE));
+            mZipcode.setText(cursor.getString(CustomersQuery.ZIPCODE));
+            mPhone.setText(cursor.getString(CustomersQuery.PHONE));
+            mMobile.setText(cursor.getString(CustomersQuery.MOBILE));
+            mEmail.setText(cursor.getString(CustomersQuery.EMAIL));
 
         } finally {
             cursor.close();
