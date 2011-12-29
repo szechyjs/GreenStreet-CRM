@@ -66,6 +66,33 @@ public class CustomerContract {
         String CUSTOMER_STARRED = "customer_starred";
 
     }
+    
+    interface JobsColumns {
+        /** Unique string identifying this job. */
+        String JOB_ID = "job_id";
+        /** ID of the customer */
+        String JOB_CUST_ID = "job_cust_id";
+        /** Title describing this job. */
+        String JOB_TITLE = "job_title";
+        /** Job description. */
+        String JOB_DESC = "job_desc";
+        /** Status of the job */
+        String JOB_STATUS = "job_status";
+        /** Due date of job */
+        String JOB_DUE = "job_due";
+        /** Step 1 status */
+        String JOB_STEP1 = "job_step1";
+        /** Step 2 status */
+        String JOB_STEP2 = "job_step2";
+        /** Step 3 status */
+        String JOB_STEP3 = "job_step3";
+        /** Step 4 status */
+        String JOB_STEP4 = "job_step4";
+        /** Step 5 status */
+        String JOB_STEP5 = "job_step5";
+        /** User-specific flag indicating starred status. */
+        String JOB_STARRED = "job_starred";
+    }
 
     public static final String CONTENT_AUTHORITY = "com.goliathonline.android.greenstreetcrm";
 
@@ -73,6 +100,7 @@ public class CustomerContract {
 
     private static final String PATH_STARRED = "starred";
     private static final String PATH_CUSTOMERS = "customers";
+    private static final String PATH_JOBS = "jobs";
     private static final String PATH_SEARCH_SUGGEST = "search_suggest_query";
 
 
@@ -103,6 +131,14 @@ public class CustomerContract {
         public static String getCustomerId(Uri uri) {
             return uri.getPathSegments().get(1);
         }
+        
+        /**
+         * Build {@link Uri} that references any {@link Jobs} associated
+         * with the requested {@link #CUSTOMER_ID}.
+         */
+        public static Uri buildJobsDirUri(String customerId) {
+            return CONTENT_URI.buildUpon().appendPath(customerId).appendPath(PATH_JOBS).build();
+        }
 
         /**
          * Generate a {@link #CUSTOMER_ID} that will always match the requested
@@ -110,6 +146,44 @@ public class CustomerContract {
          */
         public static String generateCustomerId(String customerLdap) {
             return ParserUtils.sanitizeId(customerLdap);
+        }
+    }
+    
+    /**
+     * Each job is a block of time that has a {@link Tracks}, a
+     * {@link Rooms}, and zero or more {@link Speakers}.
+     */
+    public static class Jobs implements JobsColumns, SyncColumns, BaseColumns {
+        public static final Uri CONTENT_URI =
+                BASE_CONTENT_URI.buildUpon().appendPath(PATH_JOBS).build();
+        public static final Uri CONTENT_STARRED_URI =
+                CONTENT_URI.buildUpon().appendPath(PATH_STARRED).build();
+
+        public static final String CONTENT_TYPE =
+                "vnd.android.cursor.dir/vnd.greenstreetcrm.job";
+        public static final String CONTENT_ITEM_TYPE =
+                "vnd.android.cursor.item/vnd.greenstreetcrm.job";
+
+        /** Default "ORDER BY" clause. */
+        public static final String DEFAULT_SORT = JobsColumns.JOB_ID
+        		+ " COLLATE NOCASE ASC";
+
+        /** Build {@link Uri} for requested {@link #JOB_ID}. */
+        public static Uri buildJobUri(String jobId) {
+            return CONTENT_URI.buildUpon().appendPath(jobId).build();
+        }
+
+        /** Read {@link #JOB_ID} from {@link Jobs} {@link Uri}. */
+        public static String getJobId(Uri uri) {
+            return uri.getPathSegments().get(1);
+        }
+
+        /**
+         * Generate a {@link #JOB_ID} that will always match the requested
+         * {@link Jobs} details.
+         */
+        public static String generateJobId(String title) {
+            return ParserUtils.sanitizeId(title);
         }
     }
 

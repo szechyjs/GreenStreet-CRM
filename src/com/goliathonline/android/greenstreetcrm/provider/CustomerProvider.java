@@ -1,6 +1,8 @@
 package com.goliathonline.android.greenstreetcrm.provider;
 
 import com.goliathonline.android.greenstreetcrm.provider.CustomerContract.Customers;
+import com.goliathonline.android.greenstreetcrm.provider.CustomerContract.Jobs;
+import com.goliathonline.android.greenstreetcrm.provider.CustomerDatabase.CustomersJobs;
 import com.goliathonline.android.greenstreetcrm.provider.CustomerDatabase.Tables;
 import com.goliathonline.android.greenstreetcrm.util.SelectionBuilder;
 
@@ -36,7 +38,13 @@ public class CustomerProvider extends ContentProvider {
     private static final UriMatcher sUriMatcher = buildUriMatcher();
 
     private static final int CUSTOMERS = 100;
-    private static final int CUSTOMERS_ID = 101;
+    private static final int CUSTOMERS_ID = 102;
+    private static final int CUSTOMERS_ID_JOBS = 103;
+    private static final int CUSTOMERS_STARRED = 104;
+    
+    private static final int JOBS = 200;
+    private static final int JOBS_ID = 201;
+    private static final int JOBS_STARRED = 202;
 
     /**
      * Build and return a {@link UriMatcher} that catches all {@link Uri}
@@ -48,6 +56,12 @@ public class CustomerProvider extends ContentProvider {
 
         matcher.addURI(authority, "customers", CUSTOMERS);
         matcher.addURI(authority, "customers/*", CUSTOMERS_ID);
+        matcher.addURI(authority, "customers/*/jobs", CUSTOMERS_ID_JOBS);
+        matcher.addURI(authority, "customers/starred", CUSTOMERS_STARRED);
+        
+        matcher.addURI(authority, "jobs", JOBS);
+        matcher.addURI(authority, "jobs/*", JOBS_ID);
+        matcher.addURI(authority, "jobs/starred", JOBS_STARRED);
 
         return matcher;
     }
@@ -68,6 +82,16 @@ public class CustomerProvider extends ContentProvider {
                 return Customers.CONTENT_TYPE;
             case CUSTOMERS_ID:
                 return Customers.CONTENT_ITEM_TYPE;
+            case CUSTOMERS_ID_JOBS:
+            	return Jobs.CONTENT_TYPE;
+            case CUSTOMERS_STARRED:
+            	return Customers.CONTENT_TYPE;
+            case JOBS:
+            	return Jobs.CONTENT_TYPE;
+            case JOBS_ID:
+            	return Jobs.CONTENT_ITEM_TYPE;
+            case JOBS_STARRED:
+            	return Jobs.CONTENT_TYPE;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -102,6 +126,16 @@ public class CustomerProvider extends ContentProvider {
                 retId = db.insertOrThrow(Tables.CUSTOMERS, null, values);
                 getContext().getContentResolver().notifyChange(uri, null);
                 return Customers.buildCustomerUri(String.valueOf(retId));
+            }
+            case JOBS: {
+            	retId = db.insertOrThrow(Tables.JOBS, null, values);
+                getContext().getContentResolver().notifyChange(uri, null);
+                return Jobs.buildJobUri(String.valueOf(retId));
+            }
+            case CUSTOMERS_ID_JOBS: {
+                db.insertOrThrow(Tables.CUSTOMERS_JOBS, null, values);
+                getContext().getContentResolver().notifyChange(uri, null);
+                return Jobs.buildJobUri(values.getAsString(CustomersJobs.JOB_ID));
             }
             default: {
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
@@ -171,6 +205,19 @@ public class CustomerProvider extends ContentProvider {
                 return builder.table(Tables.CUSTOMERS)
                         .where(BaseColumns._ID + "=?", customerId);
             }
+            case JOBS: {
+                return builder.table(Tables.JOBS);
+            }
+            case JOBS_ID: {
+                final String jobId = Jobs.getJobId(uri);
+                return builder.table(Tables.JOBS)
+                        .where(Jobs.JOB_ID + "=?", jobId);
+            }
+            case CUSTOMERS_ID_JOBS: {
+                final String customerId = Customers.getCustomerId(uri);
+                return builder.table(Tables.CUSTOMERS_JOBS)
+                        .where(Customers.CUSTOMER_ID + "=?", customerId);
+            }
             default: {
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
             }
@@ -193,6 +240,21 @@ public class CustomerProvider extends ContentProvider {
                 return builder.table(Tables.CUSTOMERS)
                         .where(BaseColumns._ID + "=?", customerId);
             }
+            case CUSTOMERS_ID_JOBS: {
+                final String customerId = Customers.getCustomerId(uri);
+                return builder.table(Tables.CUSTOMERS_JOBS_JOIN_JOBS)
+                        .mapToTable(Jobs._ID, Tables.JOBS)
+                        .mapToTable(Jobs.JOB_ID, Tables.JOBS)
+                        .where(Qualified.CUSTOMERS_JOBS_CUSTOMER_ID + "=?", customerId);
+            }
+            case JOBS: {
+                return builder.table(Tables.JOBS);
+            }
+            case JOBS_ID: {
+                final String jobId = Jobs.getJobId(uri);
+                return builder.table(Tables.JOBS)
+                        .where(BaseColumns._ID + "=?", jobId);
+            }
             default: {
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
             }
@@ -207,5 +269,21 @@ public class CustomerProvider extends ContentProvider {
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
             }
         }
+    }
+    
+    /**
+     * {@link ScheduleContract} fields that are fully qualified with a specific
+     * parent {@link Tables}. Used when needed to work around SQL ambiguity.
+     */
+    private interface Qualified {
+        String CUSTOMERS_CUSTOMER_ID = Tables.CUSTOMERS + "." + Customers.CUSTOMER_ID;
+
+        String CUSTOMERS_JOBS_CUSTOMER_ID = Tables.CUSTOMERS_JOBS + "."
+                + CustomersJobs.CUSTOMER_ID;
+        String CUSTOMERS_JOBS_JOB_ID = Tables.CUSTOMERS_JOBS + "."
+                + CustomersJobs.JOB_ID;
+
+        @SuppressWarnings("hiding")
+        String JOBS_STARRED = Tables.JOBS + "." + Jobs.JOB_STARRED;
     }
 }

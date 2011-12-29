@@ -1,6 +1,9 @@
 package com.goliathonline.android.greenstreetcrm.provider;
 
+import com.goliathonline.android.greenstreetcrm.provider.CustomerContract.Customers;
 import com.goliathonline.android.greenstreetcrm.provider.CustomerContract.CustomersColumns;
+import com.goliathonline.android.greenstreetcrm.provider.CustomerContract.Jobs;
+import com.goliathonline.android.greenstreetcrm.provider.CustomerContract.JobsColumns;
 import com.goliathonline.android.greenstreetcrm.provider.CustomerContract.SyncColumns;
 
 import android.content.Context;
@@ -23,11 +26,28 @@ public class CustomerDatabase extends SQLiteOpenHelper {
 
     private static final int VER_LAUNCH = 2;
     private static final int VER_CHANGE_CUST_ID = 3;
+    private static final int VER_ADD_JOBS = 4;
 
-    private static final int DATABASE_VERSION = VER_CHANGE_CUST_ID;
+    private static final int DATABASE_VERSION = VER_ADD_JOBS;
 
     interface Tables {
         String CUSTOMERS = "customers";
+        String JOBS = "jobs";
+        String CUSTOMERS_JOBS = "customers_jobs";
+        
+        String CUSTOMERS_JOBS_JOIN_JOBS = "customers_jobs "
+                + "LEFT OUTER JOIN jobs ON customers_jobs.job_id=jobs.job_id";
+    }
+    
+    public interface CustomersJobs {
+        String CUSTOMER_ID = "customer_id";
+        String JOB_ID = "job_id";
+    }
+    
+    /** {@code REFERENCES} clauses. */
+    private interface References {
+        String CUSTOMER_ID = "REFERENCES " + Tables.CUSTOMERS + "(" + Customers.CUSTOMER_ID + ")";
+        String JOB_ID = "REFERENCES " + Tables.JOBS + "(" + Jobs.JOB_ID + ")";
     }
 
     public CustomerDatabase(Context context) {
@@ -52,16 +72,29 @@ public class CustomerDatabase extends SQLiteOpenHelper {
                 + CustomersColumns.CUSTOMER_MOBILE + " TEXT,"
                 + CustomersColumns.CUSTOMER_EMAIL+ " TEXT,"
                 + CustomersColumns.CUSTOMER_STARRED + " INTEGER NOT NULL DEFAULT 0)");
-
         
-        db.execSQL("INSERT INTO " + Tables.CUSTOMERS + "("
-    			+ SyncColumns.UPDATED + ","
-    			+ CustomersColumns.CUSTOMER_ID + ","
-    			+ CustomersColumns.CUSTOMER_FIRSTNAME + ","
-    			+ CustomersColumns.CUSTOMER_LASTNAME + ","
-    			+ CustomersColumns.CUSTOMER_CITY + ","
-    			+ CustomersColumns.CUSTOMER_EMAIL + ") VALUES ("
-    			+ "0,'jszechy','Jared','Szechy','Fairborn','jared.szechy@gmail.com')");
+        db.execSQL("CREATE TABLE " + Tables.JOBS + " ("
+                + BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + SyncColumns.UPDATED + " INTEGER NOT NULL,"
+                + JobsColumns.JOB_ID + " TEXT,"
+                + JobsColumns.JOB_CUST_ID + " TEXT,"
+                + JobsColumns.JOB_TITLE + " TEXT,"
+                + JobsColumns.JOB_DESC + " TEXT,"
+                + JobsColumns.JOB_STATUS + " TEXT,"
+                + JobsColumns.JOB_DUE + " TEXT,"
+                + JobsColumns.JOB_STEP1 + " TEXT,"
+                + JobsColumns.JOB_STEP2 + " TEXT,"
+                + JobsColumns.JOB_STEP3 + " TEXT,"
+                + JobsColumns.JOB_STEP4 + " TEXT,"
+                + JobsColumns.JOB_STEP5 + " TEXT,"
+                + JobsColumns.JOB_STARRED + " INTEGER NOT NULL DEFAULT 0)");
+        
+        db.execSQL("CREATE TABLE " + Tables.CUSTOMERS_JOBS + " ("
+                + BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + CustomersJobs.CUSTOMER_ID + " TEXT NOT NULL " + References.CUSTOMER_ID + ","
+                + CustomersJobs.JOB_ID + " TEXT NOT NULL " + References.JOB_ID + ","
+                + "UNIQUE (" + CustomersJobs.CUSTOMER_ID + ","
+                        + CustomersJobs.JOB_ID + ") ON CONFLICT REPLACE)");
 
     }
 
@@ -88,6 +121,8 @@ public class CustomerDatabase extends SQLiteOpenHelper {
             Log.w(TAG, "Destroying old data during upgrade");
 
             db.execSQL("DROP TABLE IF EXISTS " + Tables.CUSTOMERS);
+            db.execSQL("DROP TABLE IF EXISTS " + Tables.CUSTOMERS_JOBS);
+            db.execSQL("DROP TABLE IF EXISTS " + Tables.CUSTOMERS_JOBS);
 
             onCreate(db);
         }
