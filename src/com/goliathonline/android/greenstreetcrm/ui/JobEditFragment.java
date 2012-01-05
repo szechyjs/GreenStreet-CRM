@@ -66,7 +66,7 @@ public class JobEditFragment extends Fragment implements
             return;
         }
 
-        // Start background query to load vendor details
+        // Start background query to load job details
         mHandler = new NotifyingAsyncQueryHandler(getActivity().getContentResolver(), this);
         mHandler.startQuery(mJobUri, JobsQuery.PROJECTION);
 //        mHandler.startQuery(CustomersQuery._TOKEN, null, CustomerContract.Customers.CONTENT_URI, CustomersQuery.PROJECTION, null, null,
@@ -150,6 +150,12 @@ public class JobEditFragment extends Fragment implements
             }
 
             mJobId.setText(cursor.getString(JobsQuery.JOB_ID));
+            for (int i = 0; i < mCustomerId.getCount(); i++)
+            	if (Long.parseLong(cursor.getString(JobsQuery.CUST_ID)) == mCustomerId.getItemIdAtPosition(i))
+            	{
+            		mCustomerId.setSelection(i);
+            		break;
+            	}
 
         } finally {
             cursor.close();

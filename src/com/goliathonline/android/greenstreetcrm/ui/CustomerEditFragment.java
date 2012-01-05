@@ -69,7 +69,7 @@ public class CustomerEditFragment extends Fragment implements
             return;
         }
 
-        // Start background query to load vendor details
+        // Start background query to load customer details
         mHandler = new NotifyingAsyncQueryHandler(getActivity().getContentResolver(), this);
         mHandler.startQuery(mCustomerUri, CustomersQuery.PROJECTION);
     }

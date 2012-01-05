@@ -15,7 +15,7 @@ import android.view.ViewGroup;
 
 /**
  * A multi-pane activity, consisting of a {@link TracksDropdownFragment}, a
- * {@link VendorsFragment}, and {@link VendorDetailFragment}. This activity is very similar in
+ * {@link CustomersFragment}, and {@link CustomerDetailFragment}. This activity is very similar in
  * function to {@link SessionsMultiPaneActivity}.
  *
  * This activity requires API level 11 or greater because {@link TracksDropdownFragment} requires

@@ -72,24 +72,24 @@ public class CustomersFragment extends ListFragment implements
 
         // Load new arguments
         final Intent intent = BaseActivity.fragmentArgumentsToIntent(arguments);
-        final Uri vendorsUri = intent.getData();
-        final int vendorQueryToken;
+        final Uri customersUri = intent.getData();
+        final int customerQueryToken;
 
-        if (vendorsUri == null) {
+        if (customersUri == null) {
             return;
         }
 
         String[] projection;
 
-        mAdapter = new VendorsAdapter(getActivity());
+        mAdapter = new CustomersAdapter(getActivity());
         projection = CustomersQuery.PROJECTION;
-        vendorQueryToken = CustomersQuery._TOKEN;
+        customerQueryToken = CustomersQuery._TOKEN;
 
 
         setListAdapter(mAdapter);
 
-        // Start background query to load vendors
-        mHandler.startQuery(vendorQueryToken, null, vendorsUri, projection, null, null,
+        // Start background query to load customers
+        mHandler.startQuery(customerQueryToken, null, customersUri, projection, null, null,
                 CustomerContract.Customers.DEFAULT_SORT);
 
     }
@@ -119,16 +119,16 @@ public class CustomersFragment extends ListFragment implements
         }
 
         if (token == CustomersQuery._TOKEN ) {
-            onVendorsOrSearchQueryComplete(cursor);
+            onCustomersOrSearchQueryComplete(cursor);
         } else {
             cursor.close();
         }
     }
 
     /**
-     * Handle {@link VendorsQuery} {@link Cursor}.
+     * Handle {@link CustomersQuery} {@link Cursor}.
      */
-    private void onVendorsOrSearchQueryComplete(Cursor cursor) {
+    private void onCustomersOrSearchQueryComplete(Cursor cursor) {
         if (mCursor != null) {
             // In case cancelOperation() doesn't work and we end up with consecutive calls to this
             // callback.
@@ -150,7 +150,7 @@ public class CustomersFragment extends ListFragment implements
     public void onResume() {
         super.onResume();
         getActivity().getContentResolver().registerContentObserver(
-                CustomerContract.Customers.CONTENT_URI, true, mVendorChangesObserver);
+                CustomerContract.Customers.CONTENT_URI, true, mCustomerChangesObserver);
         if (mCursor != null) {
             mCursor.requery();
         }
@@ -159,7 +159,7 @@ public class CustomersFragment extends ListFragment implements
     @Override
     public void onPause() {
         super.onPause();
-        getActivity().getContentResolver().unregisterContentObserver(mVendorChangesObserver);
+        getActivity().getContentResolver().unregisterContentObserver(mCustomerChangesObserver);
     }
 
     @Override
@@ -199,12 +199,12 @@ public class CustomersFragment extends ListFragment implements
     /** {@inheritDoc} */
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
-        // Launch viewer for specific vendor.
+        // Launch viewer for specific customer.
         final Cursor cursor = (Cursor)mAdapter.getItem(position);
-        final String vendorId = cursor.getString(CustomersQuery._ID);
-        final Uri vendorUri = CustomerContract.Customers.buildCustomerUri(vendorId);
+        final String customerId = cursor.getString(CustomersQuery._ID);
+        final Uri customerUri = CustomerContract.Customers.buildCustomerUri(customerId);
         ((BaseActivity) getActivity()).openActivityOrFragment(new Intent(Intent.ACTION_VIEW,
-                vendorUri));
+                customerUri));
 
         getListView().setItemChecked(position, true);
         mCheckedPosition = position;
@@ -278,10 +278,10 @@ public class CustomersFragment extends ListFragment implements
     }
 
     /**
-     * {@link CursorAdapter} that renders a {@link VendorsQuery}.
+     * {@link CursorAdapter} that renders a {@link CustomersQuery}.
      */
-    private class VendorsAdapter extends CursorAdapter {
-        public VendorsAdapter(Context context) {
+    private class CustomersAdapter extends CursorAdapter {
+        public CustomersAdapter(Context context) {
             super(context, null);
         }
 
@@ -295,7 +295,7 @@ public class CustomersFragment extends ListFragment implements
         /** {@inheritDoc} */
         @Override
         public void bindView(View view, Context context, Cursor cursor) {
-            ((TextView) view.findViewById(R.id.vendor_name)).setText(
+            ((TextView) view.findViewById(R.id.customer_name)).setText(
                     cursor.getString(CustomersQuery.LASTNAME) + ", "
                     + cursor.getString(CustomersQuery.FIRSTNAME));
 
@@ -305,7 +305,7 @@ public class CustomersFragment extends ListFragment implements
         }
     }
 
-    private ContentObserver mVendorChangesObserver = new ContentObserver(new Handler()) {
+    private ContentObserver mCustomerChangesObserver = new ContentObserver(new Handler()) {
         @Override
         public void onChange(boolean selfChange) {
             if (mCursor != null) {
@@ -315,7 +315,7 @@ public class CustomersFragment extends ListFragment implements
     };
 
     /**
-     * {@link com.google.android.apps.iosched.provider.ScheduleContract.Vendors} query parameters.
+     * {@link com.goliathonline.android.greenstreetcrm.provider.CustomerContract.Customers} query parameters.
      */
     private interface CustomersQuery {
         int _TOKEN = 0x1;

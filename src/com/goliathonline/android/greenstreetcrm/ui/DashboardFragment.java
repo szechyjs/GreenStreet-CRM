@@ -46,14 +46,14 @@ public class DashboardFragment extends Fragment {
 
         root.findViewById(R.id.home_btn_starred).setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                // Launch list of sessions and vendors the user has starred
+                // Launch list of jobs and customers the user has starred
 //                startActivity(new Intent(getActivity(), BaseSinglePaneActivity.class));                
             }
         });
 
         root.findViewById(R.id.home_btn_vendors).setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                // Launch vendors list
+                // Launch customers list
             	if (UIUtils.isHoneycombTablet(getActivity())) {
                     startActivity(new Intent(getActivity(), CustomersMultiPaneActivity.class));
                 } else {

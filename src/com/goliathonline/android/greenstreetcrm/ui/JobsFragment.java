@@ -85,7 +85,7 @@ public class JobsFragment extends ListFragment implements
 
         setListAdapter(mAdapter);
 
-        // Start background query to load vendors
+        // Start background query to load jobs
         mHandler.startQuery(jobQueryToken, null, jobsUri, projection, null, null,
                 CustomerContract.Jobs.DEFAULT_SORT);
 
@@ -116,16 +116,16 @@ public class JobsFragment extends ListFragment implements
         }
 
         if (token == JobsQuery._TOKEN ) {
-            onVendorsOrSearchQueryComplete(cursor);
+            onJobsOrSearchQueryComplete(cursor);
         } else {
             cursor.close();
         }
     }
 
     /**
-     * Handle {@link VendorsQuery} {@link Cursor}.
+     * Handle {@link JobsQuery} {@link Cursor}.
      */
-    private void onVendorsOrSearchQueryComplete(Cursor cursor) {
+    private void onJobsOrSearchQueryComplete(Cursor cursor) {
         if (mCursor != null) {
             // In case cancelOperation() doesn't work and we end up with consecutive calls to this
             // callback.
@@ -195,7 +195,7 @@ public class JobsFragment extends ListFragment implements
     /** {@inheritDoc} */
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
-        // Launch viewer for specific vendor.
+        // Launch viewer for specific job.
         final Cursor cursor = (Cursor)mAdapter.getItem(position);
         final String jobId = cursor.getString(JobsQuery._ID);
         final Uri jobUri = CustomerContract.Jobs.buildJobUri(jobId);
@@ -273,7 +273,7 @@ public class JobsFragment extends ListFragment implements
     }
 
     /**
-     * {@link CursorAdapter} that renders a {@link VendorsQuery}.
+     * {@link CursorAdapter} that renders a {@link JobsQuery}.
      */
     private class JobsAdapter extends CursorAdapter {
         public JobsAdapter(Context context) {
@@ -283,14 +283,14 @@ public class JobsFragment extends ListFragment implements
         /** {@inheritDoc} */
         @Override
         public View newView(Context context, Cursor cursor, ViewGroup parent) {
-            return getActivity().getLayoutInflater().inflate(R.layout.list_item_customer_oneline,
+            return getActivity().getLayoutInflater().inflate(R.layout.list_item_job_oneline,
                     parent, false);
         }
 
         /** {@inheritDoc} */
         @Override
         public void bindView(View view, Context context, Cursor cursor) {
-            ((TextView) view.findViewById(R.id.vendor_name)).setText(
+            ((TextView) view.findViewById(R.id.job_name)).setText(
                     cursor.getString(JobsQuery.DESC) + " - "
                     + cursor.getString(JobsQuery.STATUS));
 
@@ -310,7 +310,7 @@ public class JobsFragment extends ListFragment implements
     };
 
     /**
-     * {@link com.google.android.apps.iosched.provider.ScheduleContract.Vendors} query parameters.
+     * {@link com.goliathonline.android.greenstreetcrm.provider.CustomerContract.Jobs} query parameters.
      */
     private interface JobsQuery {
         int _TOKEN = 0x1;

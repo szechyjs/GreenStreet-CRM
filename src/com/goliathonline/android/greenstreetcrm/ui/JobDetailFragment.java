@@ -61,7 +61,7 @@ public class JobDetailFragment extends Fragment implements
             return;
         }
 
-        // Start background query to load vendor details
+        // Start background query to load job details
         mHandler = new NotifyingAsyncQueryHandler(getActivity().getContentResolver(), this);
         mHandler.startQuery(mJobUri, JobsQuery.PROJECTION);
     }
@@ -115,7 +115,7 @@ public class JobDetailFragment extends Fragment implements
                 return;
             }
 
-            mNameString = cursor.getString(JobsQuery.DESC);
+            mNameString = cursor.getString(JobsQuery.JOB_ID);
             mName.setText(mNameString);
 
             // Unregister around setting checked state to avoid triggering
@@ -142,7 +142,7 @@ public class JobDetailFragment extends Fragment implements
     }
 
     /**
-     * {@link com.google.android.apps.iosched.provider.ScheduleContract.Vendors} query parameters.
+     * {@link com.goliathonline.android.greenstreetcrm.provider.CustomerContract.Jobs} query parameters.
      */
     private interface JobsQuery {
         int _TOKEN = 0x1;
@@ -152,6 +152,7 @@ public class JobDetailFragment extends Fragment implements
                 CustomerContract.Jobs.JOB_ID,
                 CustomerContract.Jobs.JOB_DESC,
                 CustomerContract.Jobs.JOB_STATUS,
+                CustomerContract.Jobs.JOB_CUST_ID,
                 CustomerContract.Jobs.JOB_STARRED,
         };
 
@@ -159,6 +160,7 @@ public class JobDetailFragment extends Fragment implements
         int JOB_ID = 1;
         int DESC = 2;
         int STATUS = 3;
-        int STARRED = 4;
+        int CUST_ID = 4;
+        int STARRED = 5;
     }
 }

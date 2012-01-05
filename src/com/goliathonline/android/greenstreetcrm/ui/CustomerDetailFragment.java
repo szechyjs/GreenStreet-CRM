@@ -26,7 +26,7 @@ public class CustomerDetailFragment extends Fragment implements
         CompoundButton.OnCheckedChangeListener {
     private static final String TAG = "CustomerDetailFragment";
 
-    private Uri mVendorUri;
+    private Uri mCustomerUri;
 
     private ViewGroup mRootView;
     private TextView mName;
@@ -45,8 +45,8 @@ public class CustomerDetailFragment extends Fragment implements
         super.onCreate(savedInstanceState);
 
         final Intent intent = BaseActivity.fragmentArgumentsToIntent(getArguments());
-        mVendorUri = intent.getData();
-        if (mVendorUri== null) {
+        mCustomerUri = intent.getData();
+        if (mCustomerUri== null) {
             return;
         }
 
@@ -57,13 +57,13 @@ public class CustomerDetailFragment extends Fragment implements
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        if (mVendorUri == null) {
+        if (mCustomerUri == null) {
             return;
         }
 
-        // Start background query to load vendor details
+        // Start background query to load customer details
         mHandler = new NotifyingAsyncQueryHandler(getActivity().getContentResolver(), this);
-        mHandler.startQuery(mVendorUri, VendorsQuery.PROJECTION);
+        mHandler.startQuery(mCustomerUri, CustomersQuery.PROJECTION);
     }
 
     @Override
@@ -72,19 +72,19 @@ public class CustomerDetailFragment extends Fragment implements
 
         mRootView = (ViewGroup) inflater.inflate(R.layout.fragment_customer_detail, null);
 
-        mName = (TextView) mRootView.findViewById(R.id.vendor_name);
+        mName = (TextView) mRootView.findViewById(R.id.customer_name);
         mStarred = (CompoundButton) mRootView.findViewById(R.id.star_button);
 
         mStarred.setFocusable(true);
         mStarred.setClickable(true);
 
         // Larger target triggers star toggle
-        final View starParent = mRootView.findViewById(R.id.header_vendor);
+        final View starParent = mRootView.findViewById(R.id.header_customer);
         FractionalTouchDelegate.setupDelegate(starParent, mStarred, new RectF(0.6f, 0f, 1f, 0.8f));
 
-        mUrl = (TextView) mRootView.findViewById(R.id.vendor_url);
-        mDesc = (TextView) mRootView.findViewById(R.id.vendor_desc);
-        mProductDesc = (TextView) mRootView.findViewById(R.id.vendor_product_desc);
+        mUrl = (TextView) mRootView.findViewById(R.id.customer_url);
+        mDesc = (TextView) mRootView.findViewById(R.id.customer_desc);
+        mProductDesc = (TextView) mRootView.findViewById(R.id.customer_product_desc);
 
         return mRootView;
     }
@@ -116,18 +116,18 @@ public class CustomerDetailFragment extends Fragment implements
                 return;
             }
 
-            mNameString = cursor.getString(VendorsQuery.LASTNAME) + ", " + cursor.getString(VendorsQuery.FIRSTNAME);
+            mNameString = cursor.getString(CustomersQuery.LASTNAME) + ", " + cursor.getString(CustomersQuery.FIRSTNAME);
             mName.setText(mNameString);
 
             // Unregister around setting checked state to avoid triggering
             // listener since change isn't user generated.
             mStarred.setOnCheckedChangeListener(null);
-            mStarred.setChecked(cursor.getInt(VendorsQuery.STARRED) != 0);
+            mStarred.setChecked(cursor.getInt(CustomersQuery.STARRED) != 0);
             mStarred.setOnCheckedChangeListener(this);
 
-            mUrl.setText(cursor.getString(VendorsQuery.EMAIL));
-            mDesc.setText(cursor.getString(VendorsQuery.ADDRESS));
-            mProductDesc.setText(cursor.getString(VendorsQuery.CITY));
+            mUrl.setText(cursor.getString(CustomersQuery.EMAIL));
+            mDesc.setText(cursor.getString(CustomersQuery.ADDRESS));
+            mProductDesc.setText(cursor.getString(CustomersQuery.CITY));
 
         } finally {
             cursor.close();
@@ -140,13 +140,13 @@ public class CustomerDetailFragment extends Fragment implements
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         final ContentValues values = new ContentValues();
         values.put(CustomerContract.Customers.CUSTOMER_STARRED, isChecked ? 1 : 0);
-        mHandler.startUpdate(mVendorUri, values);
+        mHandler.startUpdate(mCustomerUri, values);
     }
 
     /**
-     * {@link com.google.android.apps.iosched.provider.ScheduleContract.Vendors} query parameters.
+     * {@link com.goliathonline.android.greenstreetcrm.provider.CustomerContract.Customers} query parameters.
      */
-    private interface VendorsQuery {
+    private interface CustomersQuery {
         String[] PROJECTION = {
                 CustomerContract.Customers.CUSTOMER_LASTNAME,
                 CustomerContract.Customers.CUSTOMER_FIRSTNAME,
