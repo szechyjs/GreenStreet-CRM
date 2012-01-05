@@ -58,5 +58,18 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/body_padding_medium"
             style="@style/TextBody" />
+        
+        <TextView android:id="@+id/lastEditLabel"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/body_padding_medium"
+            android:text="Last Changed:"
+            style="@style/TextBody" />
+        
+        <TextView android:id="@+id/lastEdit"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/body_padding_medium"
+            style="@style/TextBody" />
     </LinearLayout>
 </ScrollView>

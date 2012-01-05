@@ -2,8 +2,11 @@ package com.goliathonline.android.greenstreetcrm.ui;
 
 import com.goliathonline.android.greenstreetcrm.R;
 import com.goliathonline.android.greenstreetcrm.provider.CustomerContract;
+import com.goliathonline.android.greenstreetcrm.provider.CustomerContract.SyncColumns;
 import com.goliathonline.android.greenstreetcrm.util.FractionalTouchDelegate;
 import com.goliathonline.android.greenstreetcrm.util.NotifyingAsyncQueryHandler;
+import com.goliathonline.android.greenstreetcrm.util.UIUtils;
+
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
@@ -35,6 +38,7 @@ public class JobDetailFragment extends Fragment implements
 
     private TextView mStatus;
     private TextView mDesc;
+    private TextView mLastChanged;
     
     private String mNameString;
 
@@ -84,6 +88,7 @@ public class JobDetailFragment extends Fragment implements
 
         mStatus = (TextView) mRootView.findViewById(R.id.job_status);
         mDesc = (TextView) mRootView.findViewById(R.id.job_desc);
+        mLastChanged = (TextView) mRootView.findViewById(R.id.lastEdit);
 
         return mRootView;
     }
@@ -126,6 +131,7 @@ public class JobDetailFragment extends Fragment implements
 
             mStatus.setText(cursor.getString(JobsQuery.STATUS));
             mDesc.setText(cursor.getString(JobsQuery.DESC));
+            mLastChanged.setText(UIUtils.formatTime(cursor.getLong(JobsQuery.UPDATED), getActivity().getBaseContext()));
 
         } finally {
             cursor.close();
@@ -154,6 +160,7 @@ public class JobDetailFragment extends Fragment implements
                 CustomerContract.Jobs.JOB_STATUS,
                 CustomerContract.Jobs.JOB_CUST_ID,
                 CustomerContract.Jobs.JOB_STARRED,
+                SyncColumns.UPDATED,
         };
 
         int _ID = 0;
@@ -162,5 +169,6 @@ public class JobDetailFragment extends Fragment implements
         int STATUS = 3;
         int CUST_ID = 4;
         int STARRED = 5;
+        int UPDATED = 6;
     }
 }

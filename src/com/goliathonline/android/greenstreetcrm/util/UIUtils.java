@@ -13,18 +13,39 @@ import android.text.Html;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
+import android.text.format.DateUtils;
 import android.text.method.LinkMovementMethod;
 import android.text.style.StyleSpan;
 import android.widget.TextView;
 
+import java.util.Formatter;
 import java.util.List;
+import java.util.Locale;
+import java.util.TimeZone;
 
 /**
  * An assortment of UI helpers.
  */
 public class UIUtils {
 
+	public static final TimeZone TIME_ZONE = TimeZone.getTimeZone("America/New_York");
+	private static final int TIME_FLAGS = DateUtils.FORMAT_SHOW_TIME
+			| DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_YEAR
+			| DateUtils.FORMAT_SHOW_WEEKDAY | DateUtils.FORMAT_ABBREV_WEEKDAY;
+	
+	private static StringBuilder sBuilder = new StringBuilder(50);
+	private static Formatter sFormatter = new Formatter(sBuilder, Locale.getDefault());
+	
     private static StyleSpan sBoldSpan = new StyleSpan(Typeface.BOLD);
+    
+    public static String formatTime(long time, Context context)
+    {
+    	TimeZone.setDefault(TIME_ZONE);
+    	
+    	final String timeString = DateUtils.formatDateTime(context, time, TIME_FLAGS);
+    	
+    	return timeString;
+    }
 
     /**
      * Populate the given {@link TextView} with the requested text, formatting

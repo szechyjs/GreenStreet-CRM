@@ -2,8 +2,11 @@ package com.goliathonline.android.greenstreetcrm.ui;
 
 import com.goliathonline.android.greenstreetcrm.R;
 import com.goliathonline.android.greenstreetcrm.provider.CustomerContract;
+import com.goliathonline.android.greenstreetcrm.provider.CustomerContract.SyncColumns;
 import com.goliathonline.android.greenstreetcrm.util.FractionalTouchDelegate;
 import com.goliathonline.android.greenstreetcrm.util.NotifyingAsyncQueryHandler;
+import com.goliathonline.android.greenstreetcrm.util.UIUtils;
+
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
@@ -35,6 +38,7 @@ public class CustomerDetailFragment extends Fragment implements
     private TextView mUrl;
     private TextView mDesc;
     private TextView mProductDesc;
+    private TextView mLastChanged;
     
     private String mNameString;
 
@@ -85,6 +89,7 @@ public class CustomerDetailFragment extends Fragment implements
         mUrl = (TextView) mRootView.findViewById(R.id.customer_url);
         mDesc = (TextView) mRootView.findViewById(R.id.customer_desc);
         mProductDesc = (TextView) mRootView.findViewById(R.id.customer_product_desc);
+        mLastChanged = (TextView) mRootView.findViewById(R.id.lastEdit);
 
         return mRootView;
     }
@@ -128,6 +133,7 @@ public class CustomerDetailFragment extends Fragment implements
             mUrl.setText(cursor.getString(CustomersQuery.EMAIL));
             mDesc.setText(cursor.getString(CustomersQuery.ADDRESS));
             mProductDesc.setText(cursor.getString(CustomersQuery.CITY));
+            mLastChanged.setText(UIUtils.formatTime(cursor.getLong(CustomersQuery.UPDATED), getActivity().getBaseContext()));
 
         } finally {
             cursor.close();
@@ -156,6 +162,7 @@ public class CustomerDetailFragment extends Fragment implements
                 CustomerContract.Customers.CUSTOMER_PHONE,
                 CustomerContract.Customers.CUSTOMER_MOBILE,
                 CustomerContract.Customers.CUSTOMER_STARRED,
+                SyncColumns.UPDATED,
         };
 
         int LASTNAME = 0;
@@ -166,5 +173,6 @@ public class CustomerDetailFragment extends Fragment implements
         int PHONE = 5;
         int MOBILE = 6;
         int STARRED = 7;
+        int UPDATED = 8;
     }
 }
