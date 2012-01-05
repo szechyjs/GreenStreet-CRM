@@ -14,7 +14,7 @@
     
     <string name="btn_schedule">Schedule</string>
     <string name="btn_map">Map</string>
-    <string name="btn_sessions">Sessions</string>
+    <string name="btn_jobs">Jobs</string>
     <string name="btn_starred">Starred</string>
     <string name="btn_customers">Customers</string>
     <string name="btn_announcements">Bulletin</string>
