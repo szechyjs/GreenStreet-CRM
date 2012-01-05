@@ -33,9 +33,6 @@ public class UIUtils {
 			| DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_YEAR
 			| DateUtils.FORMAT_SHOW_WEEKDAY | DateUtils.FORMAT_ABBREV_WEEKDAY;
 	
-	private static StringBuilder sBuilder = new StringBuilder(50);
-	private static Formatter sFormatter = new Formatter(sBuilder, Locale.getDefault());
-	
     private static StyleSpan sBoldSpan = new StyleSpan(Typeface.BOLD);
     
     public static String formatTime(long time, Context context)
