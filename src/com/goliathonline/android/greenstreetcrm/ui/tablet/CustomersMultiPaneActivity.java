@@ -27,7 +27,7 @@ public class CustomersMultiPaneActivity extends BaseMultiPaneActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(
-                R.layout.activity_vendors);
+                R.layout.activity_customers);
         
         final Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setData(CustomerContract.Customers.CONTENT_URI);

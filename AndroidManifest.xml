@@ -57,11 +57,36 @@
         
         <activity android:name=".ui.phone.CustomerEditActivity" />
         
+        <activity
+            android:name=".ui.phone.JobsActivity"
+            android:label="Jobs">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.TAB" />
+                <data android:mimeType="vnd.android.cursor.dir/vnd.greenstreetcrm.job" />
+            </intent-filter>
+        </activity>
+        
+        <activity android:name=".ui.phone.JobDetailActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="vnd.android.cursor.item/vnd.greenstreetcrm.job" />
+            </intent-filter>
+        </activity>
+        
+        <activity android:name=".ui.phone.JobEditActivity" />
+        
         <!-- Tablet-only activities -->
         
         <activity
             android:name=".ui.tablet.CustomersMultiPaneActivity"
             android:label="Customers" />
+        
+        <activity
+            android:name=".ui.tablet.JobsMultiPaneActivity"
+            android:label="Jobs" />
         
         <!-- Other manifest items -->
         

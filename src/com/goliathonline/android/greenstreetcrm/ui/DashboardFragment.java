@@ -3,6 +3,7 @@ package com.goliathonline.android.greenstreetcrm.ui;
 import com.goliathonline.android.greenstreetcrm.R;
 import com.goliathonline.android.greenstreetcrm.provider.CustomerContract;
 import com.goliathonline.android.greenstreetcrm.ui.tablet.CustomersMultiPaneActivity;
+import com.goliathonline.android.greenstreetcrm.ui.tablet.JobsMultiPaneActivity;
 import com.goliathonline.android.greenstreetcrm.util.UIUtils;
 
 import android.content.Intent;
@@ -33,11 +34,13 @@ public class DashboardFragment extends Fragment {
         root.findViewById(R.id.home_btn_sessions).setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 // Launch sessions list
-//                if (UIUtils.isHoneycombTablet(getActivity())) {
-//                    startActivity(new Intent(getActivity(), BaseMultiPaneActivity.class));
-//                } else {
-//                    startActivity(new Intent(getActivity(), BaseSinglePaneActivity.class));
-//                }
+                if (UIUtils.isHoneycombTablet(getActivity())) {
+                    startActivity(new Intent(getActivity(), JobsMultiPaneActivity.class));
+                } else {
+                	final Intent intent = new Intent(Intent.ACTION_VIEW,
+                            CustomerContract.Jobs.CONTENT_URI);
+                    startActivity(intent);
+                }
             }
         });
 

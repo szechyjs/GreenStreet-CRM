@@ -19,7 +19,7 @@
     <string name="btn_customers">Customers</string>
     <string name="btn_announcements">Bulletin</string>
     
-    <string name="empty_sessions">No sessions found.</string>
+    <string name="empty_jobs">No jobs found.</string>
     <string name="empty_session_detail">No session details found.</string>
     <string name="empty_customers">No customers found.</string>
     <string name="empty_search">No search results found.</string>
