@@ -33,27 +33,62 @@
                 style="@style/TextHeader" />
         </RelativeLayout>
 
-        <com.goliathonline.android.greenstreetcrm.ui.widget.BezelImageView android:id="@+id/customer_logo"
-            android:scaleType="centerCrop"
-            android:layout_width="@dimen/customer_image_size"
-            android:layout_height="@dimen/customer_image_size"
-            android:layout_marginTop="@dimen/body_padding_large"
-            android:src="@drawable/sandbox_logo_empty"/>
-
-        <TextView android:id="@+id/customer_url"
+        <TextView android:id="@+id/customer_company"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:autoLink="web"
             android:layout_marginTop="@dimen/body_padding_medium"
             style="@style/TextBody" />
+        
+        <TextView android:id="@+id/addressLabel"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/body_padding_medium"
+            android:text="Address:"
+            style="@style/TextHeader3" />
 
-        <TextView android:id="@+id/customer_desc"
+        <TextView android:id="@+id/customer_address"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:lines="2"
+            android:layout_marginTop="@dimen/body_padding_medium"
+            style="@style/TextBody" />
+        
+        <TextView android:id="@+id/phoneLabel"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/body_padding_medium"
+            android:text="Phone:"
+            style="@style/TextHeader3" />
+
+        <TextView android:id="@+id/customer_phone"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/body_padding_medium"
             style="@style/TextBody" />
-
-        <TextView android:id="@+id/customer_product_desc"
+        
+        <TextView android:id="@+id/mobileLabel"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/body_padding_medium"
+            android:text="Mobile:"
+            style="@style/TextHeader3" />
+        
+        <TextView android:id="@+id/customer_mobile"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/body_padding_medium"
+            android:clickable="true"
+            style="@style/TextBody" />
+        
+        <TextView android:id="@+id/eMailLabel"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/body_padding_medium"
+            android:text="Email Address:"
+            style="@style/TextHeader3" />
+        
+        <TextView android:id="@+id/customer_email"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/body_padding_medium"
@@ -64,7 +99,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/body_padding_medium"
             android:text="Last Changed:"
-            style="@style/TextBody" />
+            style="@style/TextHeader3" />
         
         <TextView android:id="@+id/lastEdit"
             android:layout_width="fill_parent"
