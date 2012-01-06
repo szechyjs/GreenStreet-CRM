@@ -105,7 +105,7 @@ public class JobEditFragment extends Fragment implements
             case R.id.menu_save:
             	
             	ContentValues values = new ContentValues();
-                values.put(Jobs.JOB_ID, mJobId.getText().toString());
+                values.put(Jobs.JOB_ID, mJobId.getText().toString().trim());
                 values.put(Jobs.JOB_CUST_ID, mCustomerId.getSelectedItemId());
                 values.put(SyncColumns.UPDATED, UIUtils.getCurrentTime());
 

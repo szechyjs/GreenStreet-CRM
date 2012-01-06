@@ -106,16 +106,16 @@ public class CustomerEditFragment extends Fragment implements
             case R.id.menu_save:
             	
             	ContentValues values = new ContentValues();
-                values.put(Customers.CUSTOMER_LASTNAME, mLastName.getText().toString());
-                values.put(Customers.CUSTOMER_FIRSTNAME, mFirstName.getText().toString());
-                values.put(Customers.CUSTOMER_COMPANY, mCompany.getText().toString());
-                values.put(Customers.CUSTOMER_ADDRESS, mAddress.getText().toString());
-                values.put(Customers.CUSTOMER_CITY, mCity.getText().toString());
-                values.put(Customers.CUSTOMER_ZIPCODE, mZipcode.getText().toString());
-                values.put(Customers.CUSTOMER_STATE, mState.getText().toString());
-                values.put(Customers.CUSTOMER_PHONE, mPhone.getText().toString());
-                values.put(Customers.CUSTOMER_MOBILE, mMobile.getText().toString());
-                values.put(Customers.CUSTOMER_EMAIL, mEmail.getText().toString());
+                values.put(Customers.CUSTOMER_LASTNAME, mLastName.getText().toString().trim());
+                values.put(Customers.CUSTOMER_FIRSTNAME, mFirstName.getText().toString().trim());
+                values.put(Customers.CUSTOMER_COMPANY, mCompany.getText().toString().trim());
+                values.put(Customers.CUSTOMER_ADDRESS, mAddress.getText().toString().trim());
+                values.put(Customers.CUSTOMER_CITY, mCity.getText().toString().trim());
+                values.put(Customers.CUSTOMER_ZIPCODE, mZipcode.getText().toString().trim());
+                values.put(Customers.CUSTOMER_STATE, mState.getText().toString().trim());
+                values.put(Customers.CUSTOMER_PHONE, mPhone.getText().toString().trim());
+                values.put(Customers.CUSTOMER_MOBILE, mMobile.getText().toString().trim());
+                values.put(Customers.CUSTOMER_EMAIL, mEmail.getText().toString().trim());
                 values.put(SyncColumns.UPDATED, UIUtils.getCurrentTime());
 
                 if (mCustomerUri == null)
