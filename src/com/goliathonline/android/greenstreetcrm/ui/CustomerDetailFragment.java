@@ -43,6 +43,11 @@ public class CustomerDetailFragment extends Fragment implements
     private TextView mEmail;
     private TextView mLastChanged;
     
+    private TextView mAddressLabel;
+    private TextView mPhoneLabel;
+    private TextView mMobileLabel;
+    private TextView mEmailLabel;
+    
     private String mNameString;
     private String mAddress1;
     private String mAddress2;
@@ -97,6 +102,11 @@ public class CustomerDetailFragment extends Fragment implements
         mMobile = (TextView) mRootView.findViewById(R.id.customer_mobile);
         mEmail = (TextView) mRootView.findViewById(R.id.customer_email);
         mLastChanged = (TextView) mRootView.findViewById(R.id.lastEdit);
+        
+        mAddressLabel = (TextView) mRootView.findViewById(R.id.addressLabel);
+        mPhoneLabel = (TextView) mRootView.findViewById(R.id.phoneLabel);
+        mMobileLabel = (TextView) mRootView.findViewById(R.id.mobileLabel);
+        mEmailLabel = (TextView) mRootView.findViewById(R.id.eMailLabel);
 
         return mRootView;
     }
@@ -137,17 +147,58 @@ public class CustomerDetailFragment extends Fragment implements
             mStarred.setChecked(cursor.getInt(CustomersQuery.STARRED) != 0);
             mStarred.setOnCheckedChangeListener(this);
 
-            mCompany.setText(cursor.getString(CustomersQuery.COMPANY));
+            if (cursor.getString(CustomersQuery.COMPANY).isEmpty())
+            	mCompany.setVisibility(View.GONE);
+            else
+            	mCompany.setText(cursor.getString(CustomersQuery.COMPANY));
+            
             mAddress1 = cursor.getString(CustomersQuery.ADDRESS);
             mAddress2 = cursor.getString(CustomersQuery.CITY) + ", " + cursor.getString(CustomersQuery.STATE) + "  " + cursor.getString(CustomersQuery.ZIP);
-            mAddress.setText(mAddress1 + "\n" + mAddress2);
-            mAddress.setOnClickListener(mAddressClick);
-            mPhone.setText("Phone: " + cursor.getString(CustomersQuery.PHONE));
-            mPhone.setOnClickListener(mPhoneClick);
-            mMobile.setText("Mobile: " + cursor.getString(CustomersQuery.MOBILE));
-            mMobile.setOnClickListener(mMobileClick);
-            mEmail.setText(cursor.getString(CustomersQuery.EMAIL));
-            mEmail.setOnClickListener(mEmailClick);
+            
+            if (mAddress1.isEmpty())
+            {
+            	mAddress.setVisibility(View.GONE);
+            	mAddressLabel.setVisibility(View.GONE);
+            }
+            else
+            {
+            	mAddress.setText(mAddress1 + "\n" + mAddress2);
+            	mAddress.setOnClickListener(mAddressClick);
+            }
+            
+            if (cursor.getString(CustomersQuery.PHONE).isEmpty())
+            {
+            	mPhone.setVisibility(View.GONE);
+            	mPhoneLabel.setVisibility(View.GONE);
+            }
+            else
+            {
+            	mPhone.setText(cursor.getString(CustomersQuery.PHONE));
+            	mPhone.setOnClickListener(mPhoneClick);
+            }
+            
+            if (cursor.getString(CustomersQuery.MOBILE).isEmpty())
+            {
+            	mMobile.setVisibility(View.GONE);
+            	mMobileLabel.setVisibility(View.GONE);
+            }
+            else
+            {
+            	mMobile.setText(cursor.getString(CustomersQuery.MOBILE));
+                mMobile.setOnClickListener(mMobileClick);
+            }
+            
+            if (cursor.getString(CustomersQuery.EMAIL).isEmpty())
+            {
+            	mEmail.setVisibility(View.GONE);
+            	mEmailLabel.setVisibility(View.GONE);
+            }
+            else
+            {
+            	mEmail.setText(cursor.getString(CustomersQuery.EMAIL));
+                mEmail.setOnClickListener(mEmailClick);
+            }
+            
             mLastChanged.setText(UIUtils.formatTime(cursor.getLong(CustomersQuery.UPDATED), getActivity().getBaseContext()));
             
             
