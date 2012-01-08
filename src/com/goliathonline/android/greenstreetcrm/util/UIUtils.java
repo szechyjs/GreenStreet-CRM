@@ -1,5 +1,7 @@
 package com.goliathonline.android.greenstreetcrm.util;
 
+import com.goliathonline.android.greenstreetcrm.provider.CustomerContract.Jobs.Status;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -18,9 +20,7 @@ import android.text.method.LinkMovementMethod;
 import android.text.style.StyleSpan;
 import android.widget.TextView;
 
-import java.util.Formatter;
 import java.util.List;
-import java.util.Locale;
 import java.util.TimeZone;
 
 /**
@@ -129,5 +129,11 @@ public class UIUtils {
             return infos.get(0).loadIcon(pm);
         }
         return null;
+    }
+    
+    public static String jobStatusToString(final String status)
+    {
+    	Status statusEnum = Status.class.getEnumConstants()[Integer.parseInt(status)];
+    	return statusEnum.toString();
     }
 }

@@ -291,8 +291,8 @@ public class JobsFragment extends ListFragment implements
         @Override
         public void bindView(View view, Context context, Cursor cursor) {
             ((TextView) view.findViewById(R.id.job_name)).setText(
-                    cursor.getString(JobsQuery.DESC) + " - "
-                    + cursor.getString(JobsQuery.STATUS));
+                    cursor.getString(JobsQuery.JOB_ID) + " - "
+                    + UIUtils.jobStatusToString(cursor.getString(JobsQuery.STATUS)));
 
             final boolean starred = cursor.getInt(JobsQuery.STARRED) != 0;
             view.findViewById(R.id.star_button).setVisibility(

@@ -27,8 +27,9 @@ public class CustomerDatabase extends SQLiteOpenHelper {
     private static final int VER_LAUNCH = 2;
     private static final int VER_CHANGE_CUST_ID = 3;
     private static final int VER_ADD_JOBS = 4;
+    private static final int VER_CHANGE_JOB_COLS = 5;
 
-    private static final int DATABASE_VERSION = VER_ADD_JOBS;
+    private static final int DATABASE_VERSION = VER_CHANGE_JOB_COLS;
 
     interface Tables {
         String CUSTOMERS = "customers";
@@ -80,13 +81,13 @@ public class CustomerDatabase extends SQLiteOpenHelper {
                 + JobsColumns.JOB_CUST_ID + " TEXT,"
                 + JobsColumns.JOB_TITLE + " TEXT,"
                 + JobsColumns.JOB_DESC + " TEXT,"
-                + JobsColumns.JOB_STATUS + " TEXT,"
+                + JobsColumns.JOB_STATUS + " INTEGER NOT NULL DEFAULT 0,"
                 + JobsColumns.JOB_DUE + " TEXT,"
-                + JobsColumns.JOB_STEP1 + " TEXT,"
-                + JobsColumns.JOB_STEP2 + " TEXT,"
-                + JobsColumns.JOB_STEP3 + " TEXT,"
-                + JobsColumns.JOB_STEP4 + " TEXT,"
-                + JobsColumns.JOB_STEP5 + " TEXT,"
+                + JobsColumns.JOB_STEP1 + " INTEGER NOT NULL DEFAULT 0,"
+                + JobsColumns.JOB_STEP2 + " INTEGER NOT NULL DEFAULT 0,"
+                + JobsColumns.JOB_STEP3 + " INTEGER NOT NULL DEFAULT 0,"
+                + JobsColumns.JOB_STEP4 + " INTEGER NOT NULL DEFAULT 0,"
+                + JobsColumns.JOB_STEP5 + " INTEGER NOT NULL DEFAULT 0,"
                 + JobsColumns.JOB_STARRED + " INTEGER NOT NULL DEFAULT 0)");
         
         db.execSQL("CREATE TABLE " + Tables.CUSTOMERS_JOBS + " ("
@@ -121,7 +122,7 @@ public class CustomerDatabase extends SQLiteOpenHelper {
             Log.w(TAG, "Destroying old data during upgrade");
 
             db.execSQL("DROP TABLE IF EXISTS " + Tables.CUSTOMERS);
-            db.execSQL("DROP TABLE IF EXISTS " + Tables.CUSTOMERS_JOBS);
+            db.execSQL("DROP TABLE IF EXISTS " + Tables.JOBS);
             db.execSQL("DROP TABLE IF EXISTS " + Tables.CUSTOMERS_JOBS);
 
             onCreate(db);

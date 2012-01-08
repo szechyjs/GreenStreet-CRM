@@ -185,6 +185,24 @@ public class CustomerContract {
         public static String generateJobId(String title) {
             return ParserUtils.sanitizeId(title);
         }
+        
+        public static enum Status { OPEN(0), CLOSED(1);
+        
+        	private int code;
+        	
+        	private Status(int c) {
+        		code = c;
+        	}
+        	
+        	public int getCode() {
+        		return code;
+        	}
+        	
+        	@Override public String toString() {
+        	   String s = super.toString();
+        	   return s.substring(0, 1) + s.substring(1).toLowerCase();
+        	 }
+        };
     }
 
     public static class SearchSuggest {
