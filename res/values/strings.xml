@@ -25,6 +25,17 @@
     <string name="empty_search">No search results found.</string>
     <string name="empty_links">No links available.</string>
     
+    <string name="job_check1">Prep FS and invoice</string>
+    <string name="job_check2">Complete Audit</string>
+    <string name="job_check3">Close out, create WO and recreate FS </string>
+    <string name="job_check4">Recurve Stage</string>
+    <string name="job_check5">Call Back</string>
+    <string name="job_check6">Limbo</string>
+    <string name="job_check7">Complete Workscope</string>
+    <string name="job_check8">Retro Stage </string>
+    <string name="job_check9">Complete all FS, WO</string>
+    <string name="job_check10">Pop Bubbly</string>
+    
     <string name="hint_first">First</string>
     <string name="hint_last">Last</string>
     <string name="hint_street">Street</string>

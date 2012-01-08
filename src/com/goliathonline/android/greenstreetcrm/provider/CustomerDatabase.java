@@ -28,8 +28,9 @@ public class CustomerDatabase extends SQLiteOpenHelper {
     private static final int VER_CHANGE_CUST_ID = 3;
     private static final int VER_ADD_JOBS = 4;
     private static final int VER_CHANGE_JOB_COLS = 5;
+    private static final int VER_ADD_JOB_STEPS = 6;
 
-    private static final int DATABASE_VERSION = VER_CHANGE_JOB_COLS;
+    private static final int DATABASE_VERSION = VER_ADD_JOB_STEPS;
 
     interface Tables {
         String CUSTOMERS = "customers";
@@ -88,6 +89,11 @@ public class CustomerDatabase extends SQLiteOpenHelper {
                 + JobsColumns.JOB_STEP3 + " INTEGER NOT NULL DEFAULT 0,"
                 + JobsColumns.JOB_STEP4 + " INTEGER NOT NULL DEFAULT 0,"
                 + JobsColumns.JOB_STEP5 + " INTEGER NOT NULL DEFAULT 0,"
+                + JobsColumns.JOB_STEP6 + " INTEGER NOT NULL DEFAULT 0,"
+                + JobsColumns.JOB_STEP7 + " INTEGER NOT NULL DEFAULT 0,"
+                + JobsColumns.JOB_STEP8 + " INTEGER NOT NULL DEFAULT 0,"
+                + JobsColumns.JOB_STEP9 + " INTEGER NOT NULL DEFAULT 0,"
+                + JobsColumns.JOB_STEP10 + " INTEGER NOT NULL DEFAULT 0,"
                 + JobsColumns.JOB_STARRED + " INTEGER NOT NULL DEFAULT 0)");
         
         db.execSQL("CREATE TABLE " + Tables.CUSTOMERS_JOBS + " ("
@@ -110,10 +116,19 @@ public class CustomerDatabase extends SQLiteOpenHelper {
         int version = oldVersion;
 
         switch (version) {
-            case VER_LAUNCH:
-                // Do nothing as of now.
+            case VER_CHANGE_JOB_COLS:
+            	db.execSQL("ALTER TABLE " + Tables.JOBS + " ADD COLUMN "
+                        + JobsColumns.JOB_STEP6 + " INTEGER NOT NULL DEFAULT 0");
+            	db.execSQL("ALTER TABLE " + Tables.JOBS + " ADD COLUMN "
+                        + JobsColumns.JOB_STEP7 + " INTEGER NOT NULL DEFAULT 0");
+            	db.execSQL("ALTER TABLE " + Tables.JOBS + " ADD COLUMN "
+                        + JobsColumns.JOB_STEP8 + " INTEGER NOT NULL DEFAULT 0");
+            	db.execSQL("ALTER TABLE " + Tables.JOBS + " ADD COLUMN "
+                        + JobsColumns.JOB_STEP9 + " INTEGER NOT NULL DEFAULT 0");
+            	db.execSQL("ALTER TABLE " + Tables.JOBS + " ADD COLUMN "
+                        + JobsColumns.JOB_STEP10 + " INTEGER NOT NULL DEFAULT 0");
             	
-            	version = VER_LAUNCH;
+            	version = VER_ADD_JOB_STEPS;
 
         }
 

@@ -90,6 +90,16 @@ public class CustomerContract {
         String JOB_STEP4 = "job_step4";
         /** Step 5 status */
         String JOB_STEP5 = "job_step5";
+        /** Step 6 status */
+        String JOB_STEP6 = "job_step6";
+        /** Step 7 status */
+        String JOB_STEP7 = "job_step7";
+        /** Step 8 status */
+        String JOB_STEP8 = "job_step8";
+        /** Step 9 status */
+        String JOB_STEP9 = "job_step9";
+        /** Step 10 status */
+        String JOB_STEP10 = "job_step10";
         /** User-specific flag indicating starred status. */
         String JOB_STARRED = "job_starred";
     }

@@ -35,6 +35,16 @@ public class JobDetailFragment extends Fragment implements
     private ViewGroup mRootView;
     private TextView mName;
     private CompoundButton mStarred;
+    private CompoundButton mCheck1;
+    private CompoundButton mCheck2;
+    private CompoundButton mCheck3;
+    private CompoundButton mCheck4;
+    private CompoundButton mCheck5;
+    private CompoundButton mCheck6;
+    private CompoundButton mCheck7;
+    private CompoundButton mCheck8;
+    private CompoundButton mCheck9;
+    private CompoundButton mCheck10;
 
     private TextView mStatus;
     private TextView mDesc;
@@ -85,6 +95,18 @@ public class JobDetailFragment extends Fragment implements
         // Larger target triggers star toggle
         final View starParent = mRootView.findViewById(R.id.header_job);
         FractionalTouchDelegate.setupDelegate(starParent, mStarred, new RectF(0.6f, 0f, 1f, 0.8f));
+        
+        mCheck1 = (CompoundButton) mRootView.findViewById(R.id.checkBox1);
+        mCheck2 = (CompoundButton) mRootView.findViewById(R.id.checkBox2);
+        mCheck3 = (CompoundButton) mRootView.findViewById(R.id.checkBox3);
+        mCheck4 = (CompoundButton) mRootView.findViewById(R.id.checkBox4);
+        mCheck5 = (CompoundButton) mRootView.findViewById(R.id.checkBox5);
+        mCheck6 = (CompoundButton) mRootView.findViewById(R.id.checkBox6);
+        mCheck7 = (CompoundButton) mRootView.findViewById(R.id.checkBox7);
+        mCheck8 = (CompoundButton) mRootView.findViewById(R.id.checkBox8);
+        mCheck9 = (CompoundButton) mRootView.findViewById(R.id.checkBox9);
+        mCheck10 = (CompoundButton) mRootView.findViewById(R.id.checkBox10);
+
 
         mStatus = (TextView) mRootView.findViewById(R.id.job_status);
         mDesc = (TextView) mRootView.findViewById(R.id.job_desc);
@@ -128,6 +150,46 @@ public class JobDetailFragment extends Fragment implements
             mStarred.setOnCheckedChangeListener(null);
             mStarred.setChecked(cursor.getInt(JobsQuery.STARRED) != 0);
             mStarred.setOnCheckedChangeListener(this);
+            
+            mCheck1.setOnCheckedChangeListener(null);
+            mCheck1.setChecked(cursor.getInt(JobsQuery.STEP1) != 0);
+            mCheck1.setOnCheckedChangeListener(this);
+            
+            mCheck2.setOnCheckedChangeListener(null);
+            mCheck2.setChecked(cursor.getInt(JobsQuery.STEP2) != 0);
+            mCheck2.setOnCheckedChangeListener(this);
+            
+            mCheck3.setOnCheckedChangeListener(null);
+            mCheck3.setChecked(cursor.getInt(JobsQuery.STEP3) != 0);
+            mCheck3.setOnCheckedChangeListener(this);
+            
+            mCheck4.setOnCheckedChangeListener(null);
+            mCheck4.setChecked(cursor.getInt(JobsQuery.STEP4) != 0);
+            mCheck4.setOnCheckedChangeListener(this);
+            
+            mCheck5.setOnCheckedChangeListener(null);
+            mCheck5.setChecked(cursor.getInt(JobsQuery.STEP5) != 0);
+            mCheck5.setOnCheckedChangeListener(this);
+            
+            mCheck6.setOnCheckedChangeListener(null);
+            mCheck6.setChecked(cursor.getInt(JobsQuery.STEP6) != 0);
+            mCheck6.setOnCheckedChangeListener(this);
+            
+            mCheck7.setOnCheckedChangeListener(null);
+            mCheck7.setChecked(cursor.getInt(JobsQuery.STEP7) != 0);
+            mCheck7.setOnCheckedChangeListener(this);
+            
+            mCheck8.setOnCheckedChangeListener(null);
+            mCheck8.setChecked(cursor.getInt(JobsQuery.STEP8) != 0);
+            mCheck8.setOnCheckedChangeListener(this);
+            
+            mCheck9.setOnCheckedChangeListener(null);
+            mCheck9.setChecked(cursor.getInt(JobsQuery.STEP9) != 0);
+            mCheck9.setOnCheckedChangeListener(this);
+            
+            mCheck10.setOnCheckedChangeListener(null);
+            mCheck10.setChecked(cursor.getInt(JobsQuery.STEP10) != 0);
+            mCheck10.setOnCheckedChangeListener(this);
 
             mStatus.setText(cursor.getString(JobsQuery.STATUS));
             mDesc.setText(cursor.getString(JobsQuery.DESC));
@@ -143,7 +205,30 @@ public class JobDetailFragment extends Fragment implements
      */
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         final ContentValues values = new ContentValues();
-        values.put(CustomerContract.Jobs.JOB_STARRED, isChecked ? 1 : 0);
+        if (buttonView.equals(mStarred))
+        	values.put(CustomerContract.Jobs.JOB_STARRED, isChecked ? 1 : 0);
+        else if (buttonView.equals(mCheck1))
+        	values.put(CustomerContract.Jobs.JOB_STEP1, isChecked ? 1 : 0);
+        else if (buttonView.equals(mCheck2))
+        	values.put(CustomerContract.Jobs.JOB_STEP2, isChecked ? 1 : 0);
+        else if (buttonView.equals(mCheck3))
+        	values.put(CustomerContract.Jobs.JOB_STEP3, isChecked ? 1 : 0);
+        else if (buttonView.equals(mCheck4))
+        	values.put(CustomerContract.Jobs.JOB_STEP4, isChecked ? 1 : 0);
+        else if (buttonView.equals(mCheck5))
+        	values.put(CustomerContract.Jobs.JOB_STEP5, isChecked ? 1 : 0);
+        else if (buttonView.equals(mCheck6))
+        	values.put(CustomerContract.Jobs.JOB_STEP6, isChecked ? 1 : 0);
+        else if (buttonView.equals(mCheck7))
+        	values.put(CustomerContract.Jobs.JOB_STEP7, isChecked ? 1 : 0);
+        else if (buttonView.equals(mCheck8))
+        	values.put(CustomerContract.Jobs.JOB_STEP8, isChecked ? 1 : 0);
+        else if (buttonView.equals(mCheck9))
+        	values.put(CustomerContract.Jobs.JOB_STEP9, isChecked ? 1 : 0);
+        else if (buttonView.equals(mCheck10))
+        	values.put(CustomerContract.Jobs.JOB_STEP10, isChecked ? 1 : 0);
+        if (!buttonView.equals(mStarred))
+        	values.put(CustomerContract.SyncColumns.UPDATED, UIUtils.getCurrentTime());
         mHandler.startUpdate(mJobUri, values);
     }
 
@@ -159,6 +244,16 @@ public class JobDetailFragment extends Fragment implements
                 CustomerContract.Jobs.JOB_DESC,
                 CustomerContract.Jobs.JOB_STATUS,
                 CustomerContract.Jobs.JOB_CUST_ID,
+                CustomerContract.Jobs.JOB_STEP1,
+                CustomerContract.Jobs.JOB_STEP2,
+                CustomerContract.Jobs.JOB_STEP3,
+                CustomerContract.Jobs.JOB_STEP4,
+                CustomerContract.Jobs.JOB_STEP5,
+                CustomerContract.Jobs.JOB_STEP6,
+                CustomerContract.Jobs.JOB_STEP7,
+                CustomerContract.Jobs.JOB_STEP8,
+                CustomerContract.Jobs.JOB_STEP9,
+                CustomerContract.Jobs.JOB_STEP10,
                 CustomerContract.Jobs.JOB_STARRED,
                 SyncColumns.UPDATED,
         };
@@ -168,7 +263,17 @@ public class JobDetailFragment extends Fragment implements
         int DESC = 2;
         int STATUS = 3;
         int CUST_ID = 4;
-        int STARRED = 5;
-        int UPDATED = 6;
+        int STEP1 = 5;
+        int STEP2 = 6;
+        int STEP3 = 7;
+        int STEP4 = 8;
+        int STEP5 = 9;
+        int STEP6 = 10;
+        int STEP7 = 11;
+        int STEP8 = 12;
+        int STEP9 = 13;
+        int STEP10 = 14;
+        int STARRED = 15;
+        int UPDATED = 16;
     }
 }
