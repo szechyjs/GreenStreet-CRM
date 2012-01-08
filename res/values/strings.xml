@@ -10,6 +10,11 @@
     <string name="description_add">Add</string>
     <string name="description_save">Save</string>
     
+    <string name="title_starred">Starred</string>
+    
+    <string name="starred_jobs">Jobs</string>
+    <string name="starred_customers">Customers</string>
+    
     <string name="title_tagstream">Coming Soon...</string>
     
     <string name="btn_schedule">Schedule</string>

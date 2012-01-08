@@ -55,13 +55,13 @@ public class CustomerProvider extends ContentProvider {
         final String authority = CustomerContract.CONTENT_AUTHORITY;
 
         matcher.addURI(authority, "customers", CUSTOMERS);
+        matcher.addURI(authority, "customers/starred", CUSTOMERS_STARRED);
         matcher.addURI(authority, "customers/*", CUSTOMERS_ID);
         matcher.addURI(authority, "customers/*/jobs", CUSTOMERS_ID_JOBS);
-        matcher.addURI(authority, "customers/starred", CUSTOMERS_STARRED);
         
         matcher.addURI(authority, "jobs", JOBS);
-        matcher.addURI(authority, "jobs/*", JOBS_ID);
         matcher.addURI(authority, "jobs/starred", JOBS_STARRED);
+        matcher.addURI(authority, "jobs/*", JOBS_ID);
 
         return matcher;
     }
@@ -247,6 +247,11 @@ public class CustomerProvider extends ContentProvider {
                         .mapToTable(Jobs.JOB_ID, Tables.JOBS)
                         .where(Qualified.CUSTOMERS_JOBS_CUSTOMER_ID + "=?", customerId);
             }
+            case CUSTOMERS_STARRED: {
+                return builder.table(Tables.CUSTOMERS)
+                		.mapToTable(Customers._ID, Tables.CUSTOMERS)
+                        .where(Customers.CUSTOMER_STARRED + "=1");
+            }
             case JOBS: {
                 return builder.table(Tables.JOBS);
             }
@@ -254,6 +259,11 @@ public class CustomerProvider extends ContentProvider {
                 final String jobId = Jobs.getJobId(uri);
                 return builder.table(Tables.JOBS)
                         .where(BaseColumns._ID + "=?", jobId);
+            }
+            case JOBS_STARRED: {
+                return builder.table(Tables.JOBS)
+                		.mapToTable(Jobs._ID, Tables.JOBS)
+                        .where(Jobs.JOB_STARRED + "=1");
             }
             default: {
                 throw new UnsupportedOperationException("Unknown uri: " + uri);

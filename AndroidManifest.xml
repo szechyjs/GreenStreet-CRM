@@ -34,6 +34,10 @@
             </intent-filter>
         </activity>
         
+        <activity
+            android:name=".ui.StarredActivity"
+            android:label="@string/title_starred" />
+        
         <!-- Phone-only activities -->
         
         <activity

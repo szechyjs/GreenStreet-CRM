@@ -47,7 +47,7 @@ public class DashboardFragment extends Fragment {
         root.findViewById(R.id.home_btn_starred).setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 // Launch list of jobs and customers the user has starred
-//                startActivity(new Intent(getActivity(), BaseSinglePaneActivity.class));                
+            	startActivity(new Intent(getActivity(), StarredActivity.class));                
             }
         });
 

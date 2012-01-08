@@ -55,7 +55,9 @@ public class CustomersFragment extends ListFragment implements
         mHandler = new NotifyingAsyncQueryHandler(getActivity().getContentResolver(), this);
         reloadFromArguments(getArguments());
         
-        setHasOptionsMenu(true);
+        final Uri uri = getArguments().getParcelable("_uri");
+        if (!uri.getLastPathSegment().equals("starred"))
+        	setHasOptionsMenu(true);
     }
 
     public void reloadFromArguments(Bundle arguments) {

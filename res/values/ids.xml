@@ -4,8 +4,8 @@
     <item type="id" name="actionbar_compat_logo" />
     <item type="id" name="actionbar_compat_text" />
 
-    <item type="id" name="fragment_sessions" />
-    <item type="id" name="fragment_session_detail" />
+    <item type="id" name="fragment_jobs" />
+    <item type="id" name="fragment_job_detail" />
     <item type="id" name="fragment_customers" />
     <item type="id" name="fragment_customer_detail" />
     <item type="id" name="fragment_customer_edit" />
