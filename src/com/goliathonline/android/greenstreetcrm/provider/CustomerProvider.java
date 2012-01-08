@@ -211,7 +211,7 @@ public class CustomerProvider extends ContentProvider {
             case JOBS_ID: {
                 final String jobId = Jobs.getJobId(uri);
                 return builder.table(Tables.JOBS)
-                        .where(Jobs.JOB_ID + "=?", jobId);
+                        .where(Jobs._ID + "=?", jobId);
             }
             case CUSTOMERS_ID_JOBS: {
                 final String customerId = Customers.getCustomerId(uri);
