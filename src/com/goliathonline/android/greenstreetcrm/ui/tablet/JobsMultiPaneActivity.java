@@ -2,12 +2,11 @@ package com.goliathonline.android.greenstreetcrm.ui.tablet;
 
 import com.goliathonline.android.greenstreetcrm.R;
 import com.goliathonline.android.greenstreetcrm.provider.CustomerContract;
-import com.goliathonline.android.greenstreetcrm.ui.BaseActivity;
 import com.goliathonline.android.greenstreetcrm.ui.BaseMultiPaneActivity;
-import com.goliathonline.android.greenstreetcrm.ui.CustomerDetailFragment;
-import com.goliathonline.android.greenstreetcrm.ui.CustomersFragment;
-import com.goliathonline.android.greenstreetcrm.ui.phone.CustomerDetailActivity;
-import com.goliathonline.android.greenstreetcrm.ui.phone.CustomersActivity;
+import com.goliathonline.android.greenstreetcrm.ui.JobDetailFragment;
+import com.goliathonline.android.greenstreetcrm.ui.JobsFragment;
+import com.goliathonline.android.greenstreetcrm.ui.phone.JobDetailActivity;
+import com.goliathonline.android.greenstreetcrm.ui.phone.JobsActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -30,7 +29,7 @@ public class JobsMultiPaneActivity extends BaseMultiPaneActivity {
                 R.layout.activity_jobs);
         
         final Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setData(CustomerContract.Customers.CONTENT_URI);
+        intent.setData(CustomerContract.Jobs.CONTENT_URI);
         openActivityOrFragment(intent);
     }
 
@@ -48,16 +47,16 @@ public class JobsMultiPaneActivity extends BaseMultiPaneActivity {
 
     @Override
     public FragmentReplaceInfo onSubstituteFragmentForActivityLaunch(String activityClassName) {
-        if (CustomersActivity.class.getName().equals(activityClassName)) {
+        if (JobsActivity.class.getName().equals(activityClassName)) {
             return new FragmentReplaceInfo(
-                    CustomersFragment.class,
+                    JobsFragment.class,
                     "jobs",
-                    R.id.fragment_container_customers);
-        } else if (CustomerDetailActivity.class.getName().equals(activityClassName)) {
+                    R.id.fragment_container_jobs);
+        } else if (JobDetailActivity.class.getName().equals(activityClassName)) {
             findViewById(R.id.fragment_container_job_detail).setBackgroundColor(
                     0xffffffff);
             return new FragmentReplaceInfo(
-                    CustomerDetailFragment.class,
+                    JobDetailFragment.class,
                     "job_detail",
                     R.id.fragment_container_job_detail);
         }
