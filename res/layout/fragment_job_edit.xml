@@ -4,7 +4,11 @@
 <RelativeLayout 
     android:id="@+id/RelativeLayout1"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent" >
+    android:layout_height="fill_parent"
+    android:paddingLeft="@dimen/body_padding_large"
+    android:paddingRight="@dimen/body_padding_large"
+    android:paddingTop="@dimen/body_padding_medium"
+    android:paddingBottom="@dimen/body_padding_medium" >
 
     <TextView
         android:id="@+id/textView1"
