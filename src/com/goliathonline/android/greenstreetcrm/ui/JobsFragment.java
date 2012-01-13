@@ -2,10 +2,14 @@ package com.goliathonline.android.greenstreetcrm.ui;
 
 import com.goliathonline.android.greenstreetcrm.R;
 import com.goliathonline.android.greenstreetcrm.provider.CustomerContract;
+import com.goliathonline.android.greenstreetcrm.provider.CustomerContract.Jobs;
 import com.goliathonline.android.greenstreetcrm.ui.phone.JobEditActivity;
 import com.goliathonline.android.greenstreetcrm.util.NotifyingAsyncQueryHandler;
 import com.goliathonline.android.greenstreetcrm.util.UIUtils;
 
+import android.app.ActionBar;
+import android.app.ActionBar.Tab;
+import android.app.ActionBar.TabListener;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -43,6 +47,8 @@ public class JobsFragment extends ListFragment implements
     private CursorAdapter mAdapter;
     private int mCheckedPosition = -1;
     private boolean mHasSetEmptyText = false;
+    private final int mJobQueryToken = JobsQuery._TOKEN;
+    private final String[] mProjection = JobsQuery.PROJECTION;
 
     private NotifyingAsyncQueryHandler mHandler;
 
@@ -55,6 +61,19 @@ public class JobsFragment extends ListFragment implements
         final Uri uri = getArguments().getParcelable("_uri");
         if (!uri.getLastPathSegment().equals("starred"))
         	setHasOptionsMenu(true);
+        
+        ActionBar actionbar = getActivity().getActionBar();
+        actionbar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+        actionbar.setDisplayShowTitleEnabled(false);
+        
+        Tab all = actionbar.newTab().setText("All Jobs").setTabListener(allJobsTabListener);
+        Tab open = actionbar.newTab().setText("Open Jobs").setTabListener(openJobsTabListener);
+        Tab closed = actionbar.newTab().setText("Closed Jobs").setTabListener(closedJobsTabListener);
+        
+        actionbar.addTab(all);
+        actionbar.addTab(open);
+        actionbar.addTab(closed);
+        
     }
 
     public void reloadFromArguments(Bundle arguments) {
@@ -72,23 +91,17 @@ public class JobsFragment extends ListFragment implements
         // Load new arguments
         final Intent intent = BaseActivity.fragmentArgumentsToIntent(arguments);
         final Uri jobsUri = intent.getData();
-        final int jobQueryToken;
 
         if (jobsUri == null) {
             return;
         }
 
-        String[] projection;
-
         mAdapter = new JobsAdapter(getActivity());
-        projection = JobsQuery.PROJECTION;
-        jobQueryToken = JobsQuery._TOKEN;
-
 
         setListAdapter(mAdapter);
 
         // Start background query to load jobs
-        mHandler.startQuery(jobQueryToken, null, jobsUri, projection, null, null,
+        mHandler.startQuery(mJobQueryToken, null, jobsUri, mProjection, null, null,
                 CustomerContract.Jobs.DEFAULT_SORT);
 
     }
@@ -273,6 +286,81 @@ public class JobsFragment extends ListFragment implements
             mCheckedPosition = -1;
         }
     }
+    
+    private TabListener allJobsTabListener = new TabListener()
+    {
+
+		public void onTabReselected(Tab arg0,
+				android.app.FragmentTransaction arg1) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		public void onTabSelected(Tab arg0, android.app.FragmentTransaction arg1) {
+	        final Uri jobsUri = Jobs.CONTENT_URI;
+
+	        // Start background query to load jobs
+	        mHandler.startQuery(mJobQueryToken, null, jobsUri, mProjection, null, null,
+	                CustomerContract.Jobs.DEFAULT_SORT);
+		}
+
+		public void onTabUnselected(Tab arg0,
+				android.app.FragmentTransaction arg1) {
+			// TODO Auto-generated method stub
+			
+		}
+    	
+    };
+    
+    private TabListener openJobsTabListener = new TabListener()
+    {
+
+		public void onTabReselected(Tab arg0,
+				android.app.FragmentTransaction arg1) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		public void onTabSelected(Tab arg0, android.app.FragmentTransaction arg1) {
+	        final Uri jobsUri = Jobs.CONTENT_OPEN_URI;
+
+	        // Start background query to load jobs
+	        mHandler.startQuery(mJobQueryToken, null, jobsUri, mProjection, null, null,
+	                CustomerContract.Jobs.DEFAULT_SORT);
+		}
+
+		public void onTabUnselected(Tab arg0,
+				android.app.FragmentTransaction arg1) {
+			// TODO Auto-generated method stub
+			
+		}
+    	
+    };
+    
+    private TabListener closedJobsTabListener = new TabListener()
+    {
+
+		public void onTabReselected(Tab arg0,
+				android.app.FragmentTransaction arg1) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		public void onTabSelected(Tab arg0, android.app.FragmentTransaction arg1) {
+	        final Uri jobsUri = Jobs.CONTENT_CLOSED_URI;
+
+	        // Start background query to load jobs
+	        mHandler.startQuery(mJobQueryToken, null, jobsUri, mProjection, null, null,
+	                CustomerContract.Jobs.DEFAULT_SORT);
+		}
+
+		public void onTabUnselected(Tab arg0,
+				android.app.FragmentTransaction arg1) {
+			// TODO Auto-generated method stub
+			
+		}
+    	
+    };
 
     /**
      * {@link CursorAdapter} that renders a {@link JobsQuery}.

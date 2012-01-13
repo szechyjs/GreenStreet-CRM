@@ -111,6 +111,8 @@ public class CustomerContract {
     private static final String PATH_STARRED = "starred";
     private static final String PATH_CUSTOMERS = "customers";
     private static final String PATH_JOBS = "jobs";
+    private static final String PATH_OPEN = "open";
+    private static final String PATH_CLOSED = "closed";
     private static final String PATH_SEARCH_SUGGEST = "search_suggest_query";
 
 
@@ -168,6 +170,10 @@ public class CustomerContract {
                 BASE_CONTENT_URI.buildUpon().appendPath(PATH_JOBS).build();
         public static final Uri CONTENT_STARRED_URI =
                 CONTENT_URI.buildUpon().appendPath(PATH_STARRED).build();
+        public static final Uri CONTENT_OPEN_URI =
+        		CONTENT_URI.buildUpon().appendPath(PATH_OPEN).build();
+        public static final Uri CONTENT_CLOSED_URI =
+        		CONTENT_URI.buildUpon().appendPath(PATH_CLOSED).build();
 
         public static final String CONTENT_TYPE =
                 "vnd.android.cursor.dir/vnd.greenstreetcrm.job";

@@ -45,6 +45,8 @@ public class CustomerProvider extends ContentProvider {
     private static final int JOBS = 200;
     private static final int JOBS_ID = 201;
     private static final int JOBS_STARRED = 202;
+    private static final int JOBS_OPEN = 203;
+    private static final int JOBS_CLOSED = 204;
 
     /**
      * Build and return a {@link UriMatcher} that catches all {@link Uri}
@@ -61,6 +63,8 @@ public class CustomerProvider extends ContentProvider {
         
         matcher.addURI(authority, "jobs", JOBS);
         matcher.addURI(authority, "jobs/starred", JOBS_STARRED);
+        matcher.addURI(authority, "jobs/open", JOBS_OPEN);
+        matcher.addURI(authority, "jobs/closed", JOBS_CLOSED);
         matcher.addURI(authority, "jobs/*", JOBS_ID);
 
         return matcher;
@@ -91,6 +95,10 @@ public class CustomerProvider extends ContentProvider {
             case JOBS_ID:
             	return Jobs.CONTENT_ITEM_TYPE;
             case JOBS_STARRED:
+            	return Jobs.CONTENT_TYPE;
+            case JOBS_OPEN:
+            	return Jobs.CONTENT_TYPE;
+            case JOBS_CLOSED:
             	return Jobs.CONTENT_TYPE;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
@@ -264,6 +272,16 @@ public class CustomerProvider extends ContentProvider {
                 return builder.table(Tables.JOBS)
                 		.mapToTable(Jobs._ID, Tables.JOBS)
                         .where(Jobs.JOB_STARRED + "=1");
+            }
+            case JOBS_OPEN: {
+            	return builder.table(Tables.JOBS)
+            			.mapToTable(Jobs._ID, Tables.JOBS)
+            			.where(Jobs.JOB_STATUS + "=" + Jobs.Status.OPEN.getCode());
+            }
+            case JOBS_CLOSED: {
+            	return builder.table(Tables.JOBS)
+            			.mapToTable(Jobs._ID, Tables.JOBS)
+            			.where(Jobs.JOB_STATUS + "=" + Jobs.Status.CLOSED.getCode());
             }
             default: {
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
