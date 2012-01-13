@@ -18,7 +18,11 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 /**
@@ -46,7 +50,7 @@ public class JobDetailFragment extends Fragment implements
     private CompoundButton mCheck9;
     private CompoundButton mCheck10;
 
-    private TextView mStatus;
+    private Spinner mStatus;
     private TextView mDesc;
     private TextView mLastChanged;
     
@@ -108,7 +112,13 @@ public class JobDetailFragment extends Fragment implements
         mCheck10 = (CompoundButton) mRootView.findViewById(R.id.checkBox10);
 
 
-        mStatus = (TextView) mRootView.findViewById(R.id.job_status);
+        mStatus = (Spinner) mRootView.findViewById(R.id.job_status);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
+                getActivity().getBaseContext(), R.array.status_array, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mStatus.setAdapter(adapter);
+        mStatus.setOnItemSelectedListener(statusChanged);
+        
         mDesc = (TextView) mRootView.findViewById(R.id.job_desc);
         mLastChanged = (TextView) mRootView.findViewById(R.id.lastEdit);
 
@@ -191,7 +201,7 @@ public class JobDetailFragment extends Fragment implements
             mCheck10.setChecked(cursor.getInt(JobsQuery.STEP10) != 0);
             mCheck10.setOnCheckedChangeListener(this);
 
-            mStatus.setText(cursor.getString(JobsQuery.STATUS));
+            mStatus.setSelection(cursor.getInt(JobsQuery.STATUS));
             mDesc.setText(cursor.getString(JobsQuery.DESC));
             mLastChanged.setText(UIUtils.formatTime(cursor.getLong(JobsQuery.UPDATED), getActivity().getBaseContext()));
 
@@ -231,6 +241,18 @@ public class JobDetailFragment extends Fragment implements
         	values.put(CustomerContract.SyncColumns.UPDATED, UIUtils.getCurrentTime());
         mHandler.startUpdate(mJobUri, values);
     }
+    
+    private OnItemSelectedListener statusChanged = new OnItemSelectedListener() {
+    	public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3)
+    	{
+    		int index = mStatus.getSelectedItemPosition();
+    		final ContentValues values = new ContentValues();
+    		values.put(CustomerContract.Jobs.JOB_STATUS, index);
+    		mHandler.startUpdate(mJobUri, values);
+    	}
+    	
+    	public void onNothingSelected(AdapterView<?> arg0) {}
+    };
 
     /**
      * {@link com.goliathonline.android.greenstreetcrm.provider.CustomerContract.Jobs} query parameters.

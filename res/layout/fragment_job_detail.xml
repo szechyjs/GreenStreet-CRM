@@ -33,12 +33,10 @@
                 style="@style/TextHeader" />
         </RelativeLayout>
 
-        <TextView android:id="@+id/job_status"
-            android:layout_width="fill_parent"
+        <Spinner android:id="@+id/job_status"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:autoLink="web"
-            android:layout_marginTop="@dimen/body_padding_medium"
-            style="@style/TextBody" />
+            android:layout_marginTop="@dimen/body_padding_medium" />
 
         <TextView android:id="@+id/job_desc"
             android:layout_width="fill_parent"
