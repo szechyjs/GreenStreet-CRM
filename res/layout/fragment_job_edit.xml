@@ -27,7 +27,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/textView1"
-        android:hint="@string/hint_last"
         android:inputType="textPersonName"
         android:nextFocusDown="@+id/customer_id" >
 
