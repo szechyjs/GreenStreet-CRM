@@ -1,0 +1,1 @@
+git log --pretty=medium --abbrev-commit > changelog.txt
