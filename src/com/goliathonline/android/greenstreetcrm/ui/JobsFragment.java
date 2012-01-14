@@ -48,7 +48,7 @@ public class JobsFragment extends ListFragment implements
     private int mCheckedPosition = -1;
     private boolean mHasSetEmptyText = false;
     private final int mJobQueryToken = JobsQuery._TOKEN;
-    private final String[] mProjection = JobsQuery.PROJECTION;
+    private final String[] mJobProjection = JobsQuery.PROJECTION;
 
     private NotifyingAsyncQueryHandler mHandler;
 
@@ -103,9 +103,8 @@ public class JobsFragment extends ListFragment implements
         setListAdapter(mAdapter);
 
         // Start background query to load jobs
-        mHandler.startQuery(mJobQueryToken, null, jobsUri, mProjection, null, null,
+        mHandler.startQuery(mJobQueryToken, null, jobsUri, mJobProjection, null, null,
                 CustomerContract.Jobs.DEFAULT_SORT);
-
     }
 
     @Override
@@ -263,7 +262,7 @@ public class JobsFragment extends ListFragment implements
       	       .setCancelable(false)
       	       .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
       	           public void onClick(DialogInterface dialog, int id) {
-      	        	 int ret = getActivity().getContentResolver().delete(jobUri, null, null);
+      	        	 getActivity().getContentResolver().delete(jobUri, null, null);
       	        	 dialog.dismiss();
       	           }
       	       })
@@ -302,7 +301,7 @@ public class JobsFragment extends ListFragment implements
 	        final Uri jobsUri = Jobs.CONTENT_URI;
 
 	        // Start background query to load jobs
-	        mHandler.startQuery(mJobQueryToken, null, jobsUri, mProjection, null, null,
+	        mHandler.startQuery(mJobQueryToken, null, jobsUri, mJobProjection, null, null,
 	                CustomerContract.Jobs.DEFAULT_SORT);
 		}
 
@@ -327,7 +326,7 @@ public class JobsFragment extends ListFragment implements
 	        final Uri jobsUri = Jobs.CONTENT_OPEN_URI;
 
 	        // Start background query to load jobs
-	        mHandler.startQuery(mJobQueryToken, null, jobsUri, mProjection, null, null,
+	        mHandler.startQuery(mJobQueryToken, null, jobsUri, mJobProjection, null, null,
 	                CustomerContract.Jobs.DEFAULT_SORT);
 		}
 
@@ -352,7 +351,7 @@ public class JobsFragment extends ListFragment implements
 	        final Uri jobsUri = Jobs.CONTENT_CLOSED_URI;
 
 	        // Start background query to load jobs
-	        mHandler.startQuery(mJobQueryToken, null, jobsUri, mProjection, null, null,
+	        mHandler.startQuery(mJobQueryToken, null, jobsUri, mJobProjection, null, null,
 	                CustomerContract.Jobs.DEFAULT_SORT);
 		}
 
@@ -412,6 +411,7 @@ public class JobsFragment extends ListFragment implements
                 CustomerContract.Jobs.JOB_ID,
                 CustomerContract.Jobs.JOB_DESC,
                 CustomerContract.Jobs.JOB_STATUS,
+                CustomerContract.Jobs.JOB_CUST_ID,
                 CustomerContract.Jobs.JOB_STARRED,
         };
 
@@ -419,6 +419,7 @@ public class JobsFragment extends ListFragment implements
         int JOB_ID = 1;
         int DESC = 2;
         int STATUS = 3;
-        int STARRED = 4;
+        int CUST_ID = 4;
+        int STARRED = 5;
     }
 }

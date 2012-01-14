@@ -3,13 +3,8 @@ package com.goliathonline.android.greenstreetcrm.provider;
 //import com.google.android.apps.iosched.util.ParserUtils;
 
 import android.app.SearchManager;
-import android.graphics.Color;
 import android.net.Uri;
 import android.provider.BaseColumns;
-import android.text.format.DateUtils;
-
-import java.util.List;
-
 import com.goliathonline.android.greenstreetcrm.util.ParserUtils;
 /**
  * Contract class for interacting with {@link CustomerProvider}. Unless
