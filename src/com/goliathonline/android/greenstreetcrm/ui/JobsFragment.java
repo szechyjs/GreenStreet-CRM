@@ -60,19 +60,21 @@ public class JobsFragment extends ListFragment implements
         
         final Uri uri = getArguments().getParcelable("_uri");
         if (!uri.getLastPathSegment().equals("starred"))
+        {
         	setHasOptionsMenu(true);
         
-        ActionBar actionbar = getActivity().getActionBar();
-        actionbar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-        actionbar.setDisplayShowTitleEnabled(false);
-        
-        Tab all = actionbar.newTab().setText("All Jobs").setTabListener(allJobsTabListener);
-        Tab open = actionbar.newTab().setText("Open Jobs").setTabListener(openJobsTabListener);
-        Tab closed = actionbar.newTab().setText("Closed Jobs").setTabListener(closedJobsTabListener);
-        
-        actionbar.addTab(all);
-        actionbar.addTab(open);
-        actionbar.addTab(closed);
+	        ActionBar actionbar = getActivity().getActionBar();
+	        actionbar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+	        actionbar.setDisplayShowTitleEnabled(false);
+	        
+	        Tab all = actionbar.newTab().setText("All Jobs").setTabListener(allJobsTabListener);
+	        Tab open = actionbar.newTab().setText("Open Jobs").setTabListener(openJobsTabListener);
+	        Tab closed = actionbar.newTab().setText("Closed Jobs").setTabListener(closedJobsTabListener);
+	        
+	        actionbar.addTab(all);
+	        actionbar.addTab(open);
+	        actionbar.addTab(closed);
+        }
         
     }
 
