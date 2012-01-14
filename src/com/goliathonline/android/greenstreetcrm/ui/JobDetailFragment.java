@@ -126,20 +126,6 @@ public class JobDetailFragment extends Fragment implements
     }
 
     /**
-     * Build a {@link android.view.View} to be used as a tab indicator, setting the requested string resource as
-     * its label.
-     *
-     * @return View
-     */
-    private View buildIndicator(int textRes) {
-        final TextView indicator = (TextView) getActivity().getLayoutInflater()
-                .inflate(R.layout.tab_indicator,
-                        (ViewGroup) mRootView.findViewById(android.R.id.tabs), false);
-        indicator.setText(textRes);
-        return indicator;
-    }
-
-    /**
      * {@inheritDoc}
      */
     public void onQueryComplete(int token, Object cookie, Cursor cursor) {
@@ -248,6 +234,7 @@ public class JobDetailFragment extends Fragment implements
     		int index = mStatus.getSelectedItemPosition();
     		final ContentValues values = new ContentValues();
     		values.put(CustomerContract.Jobs.JOB_STATUS, index);
+    		values.put(CustomerContract.SyncColumns.UPDATED, UIUtils.getCurrentTime());
     		mHandler.startUpdate(mJobUri, values);
     	}
     	
