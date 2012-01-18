@@ -61,7 +61,7 @@ public class CustomerContract {
         String CUSTOMER_STARRED = "customer_starred";
 
     }
-    
+
     interface JobsColumns {
         /** Unique string identifying this job. */
         String JOB_ID = "job_id";
@@ -99,6 +99,19 @@ public class CustomerContract {
         String JOB_STARRED = "job_starred";
     }
 
+    interface MemosColumns {
+        /** Unique string identifying this memo. */
+        String MEMO_ID = "memo_id";
+        /** ID of the job. */
+        String MEMO_JOB_ID = "memo_job_id";
+        /** Section ID */
+        String MEMO_SECT_ID = "memo_sect_id";
+        /** Memo text */
+        String MEMO_TEXT = "memo_text";
+        /** User-specific flag indicating starred status. */
+        String MEMO_STARRED = "memo_starred";
+    }
+
     public static final String CONTENT_AUTHORITY = "com.goliathonline.android.greenstreetcrm";
 
     private static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
@@ -108,11 +121,12 @@ public class CustomerContract {
     private static final String PATH_JOBS = "jobs";
     private static final String PATH_OPEN = "open";
     private static final String PATH_CLOSED = "closed";
+    private static final String PATH_MEMOS = "memos";
     private static final String PATH_SEARCH_SUGGEST = "search_suggest_query";
 
 
     /**
-     * Customers are individual people that lead {@link Sessions}.
+     * Customers are individual people that lead {@link Jobs}.
      */
     public static class Customers implements CustomersColumns, SyncColumns, BaseColumns {
         public static final Uri CONTENT_URI =
@@ -138,7 +152,7 @@ public class CustomerContract {
         public static String getCustomerId(Uri uri) {
             return uri.getPathSegments().get(1);
         }
-        
+
         /**
          * Build {@link Uri} that references any {@link Jobs} associated
          * with the requested {@link #CUSTOMER_ID}.
@@ -155,7 +169,7 @@ public class CustomerContract {
             return ParserUtils.sanitizeId(customerLdap);
         }
     }
-    
+
     /**
      * Each job is a block of time that has a {@link Tracks}, a
      * {@link Rooms}, and zero or more {@link Speakers}.
@@ -196,24 +210,65 @@ public class CustomerContract {
         public static String generateJobId(String title) {
             return ParserUtils.sanitizeId(title);
         }
-        
+
         public static enum Status { OPEN(0), CLOSED(1);
-        
+
         	private int code;
-        	
+
         	private Status(int c) {
         		code = c;
         	}
-        	
+
         	public int getCode() {
         		return code;
         	}
-        	
+
         	@Override public String toString() {
         	   String s = super.toString();
         	   return s.substring(0, 1) + s.substring(1).toLowerCase();
         	 }
         };
+    }
+
+    /**
+     * Memos are individual messages that apply to  {@link Jobs}.
+     */
+    public static class Memos implements MemosColumns, SyncColumns, BaseColumns {
+        public static final Uri CONTENT_URI =
+                BASE_CONTENT_URI.buildUpon().appendPath(PATH_MEMOS).build();
+        public static final Uri CONTENT_STARRED_URI =
+                CONTENT_URI.buildUpon().appendPath(PATH_STARRED).build();
+
+        public static final String CONTENT_TYPE =
+                "vnd.android.cursor.dir/vnd.greenstreetcrm.memo";
+        public static final String CONTENT_ITEM_TYPE =
+                "vnd.android.cursor.item/vnd.greenstreetcrm.memo";
+
+        /** Default "ORDER BY" clause. */
+        public static final String DEFAULT_SORT = MemosColumns.MEMO_ID
+                + " COLLATE NOCASE ASC";
+
+        /** Build {@link Uri} for requested {@link #CUSTOMER_ID}. */
+        public static Uri buildMemoUri(String memoId) {
+            return CONTENT_URI.buildUpon().appendPath(memoId).build();
+        }
+
+        /** Read {@link #MEMO_ID} from {@link Memos} {@link Uri}. */
+        public static String getMemoId(Uri uri) {
+            return uri.getPathSegments().get(1);
+        }
+
+        public static String getJobId(Uri uri) {
+            return uri.getPathSegments().get(2);
+        }
+
+        /**
+         * Generate a {@link #CUSTOMER_ID} that will always match the requested
+         * {@link Customers} details.
+         */
+        public static String generateMemoId(String memoId) {
+            return ParserUtils.sanitizeId(memoId);
+        }
     }
 
     public static class SearchSuggest {

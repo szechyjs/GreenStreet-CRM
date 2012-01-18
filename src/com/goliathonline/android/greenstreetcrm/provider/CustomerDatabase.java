@@ -4,6 +4,8 @@ import com.goliathonline.android.greenstreetcrm.provider.CustomerContract.Custom
 import com.goliathonline.android.greenstreetcrm.provider.CustomerContract.CustomersColumns;
 import com.goliathonline.android.greenstreetcrm.provider.CustomerContract.Jobs;
 import com.goliathonline.android.greenstreetcrm.provider.CustomerContract.JobsColumns;
+import com.goliathonline.android.greenstreetcrm.provider.CustomerContract.Memos;
+import com.goliathonline.android.greenstreetcrm.provider.CustomerContract.MemosColumns;
 import com.goliathonline.android.greenstreetcrm.provider.CustomerContract.SyncColumns;
 
 import android.content.Context;
@@ -29,27 +31,30 @@ public class CustomerDatabase extends SQLiteOpenHelper {
     private static final int VER_ADD_JOBS = 4;
     private static final int VER_CHANGE_JOB_COLS = 5;
     private static final int VER_ADD_JOB_STEPS = 6;
+    private static final int VER_ADD_MEMOS = 7;
 
-    private static final int DATABASE_VERSION = VER_ADD_JOB_STEPS;
+    private static final int DATABASE_VERSION = VER_ADD_MEMOS;
 
     interface Tables {
         String CUSTOMERS = "customers";
         String JOBS = "jobs";
+        String MEMOS = "memos";
         String CUSTOMERS_JOBS = "customers_jobs";
-        
+
         String CUSTOMERS_JOBS_JOIN_JOBS = "customers_jobs "
                 + "LEFT OUTER JOIN jobs ON customers_jobs.job_id=jobs.job_id";
     }
-    
+
     public interface CustomersJobs {
         String CUSTOMER_ID = "customer_id";
         String JOB_ID = "job_id";
     }
-    
+
     /** {@code REFERENCES} clauses. */
     private interface References {
         String CUSTOMER_ID = "REFERENCES " + Tables.CUSTOMERS + "(" + Customers.CUSTOMER_ID + ")";
         String JOB_ID = "REFERENCES " + Tables.JOBS + "(" + Jobs.JOB_ID + ")";
+        String MEMO_ID = "REFERENCES " + Tables.MEMOS + "(" + Memos.MEMO_ID + ")";
     }
 
     public CustomerDatabase(Context context) {
@@ -74,7 +79,7 @@ public class CustomerDatabase extends SQLiteOpenHelper {
                 + CustomersColumns.CUSTOMER_MOBILE + " TEXT,"
                 + CustomersColumns.CUSTOMER_EMAIL+ " TEXT,"
                 + CustomersColumns.CUSTOMER_STARRED + " INTEGER NOT NULL DEFAULT 0)");
-        
+
         db.execSQL("CREATE TABLE " + Tables.JOBS + " ("
                 + BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + SyncColumns.UPDATED + " INTEGER NOT NULL,"
@@ -95,7 +100,16 @@ public class CustomerDatabase extends SQLiteOpenHelper {
                 + JobsColumns.JOB_STEP9 + " INTEGER NOT NULL DEFAULT 0,"
                 + JobsColumns.JOB_STEP10 + " INTEGER NOT NULL DEFAULT 0,"
                 + JobsColumns.JOB_STARRED + " INTEGER NOT NULL DEFAULT 0)");
-        
+
+        db.execSQL("CREATE TABLE " + Tables.MEMOS + " ("
+                + BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + SyncColumns.UPDATED + " INTEGER NOT NULL,"
+                + MemosColumns.MEMO_ID + " TEXT,"
+                + MemosColumns.MEMO_JOB_ID + " TEXT,"
+                + MemosColumns.MEMO_SECT_ID + " TEXT,"
+                + MemosColumns.MEMO_TEXT + " TEXT,"
+                + MemosColumns.MEMO_STARRED + " INTEGER NOT NULL DEFAULT 0)");
+
         db.execSQL("CREATE TABLE " + Tables.CUSTOMERS_JOBS + " ("
                 + BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + CustomersJobs.CUSTOMER_ID + " TEXT NOT NULL " + References.CUSTOMER_ID + ","
@@ -127,9 +141,20 @@ public class CustomerDatabase extends SQLiteOpenHelper {
                         + JobsColumns.JOB_STEP9 + " INTEGER NOT NULL DEFAULT 0");
             	db.execSQL("ALTER TABLE " + Tables.JOBS + " ADD COLUMN "
                         + JobsColumns.JOB_STEP10 + " INTEGER NOT NULL DEFAULT 0");
-            	
+
             	version = VER_ADD_JOB_STEPS;
 
+            case VER_ADD_JOB_STEPS:
+                db.execSQL("CREATE TABLE " + Tables.MEMOS + " ("
+                    + BaseColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                    + SyncColumns.UPDATED + " INTEGER NOT NULL,"
+                    + MemosColumns.MEMO_ID + " TEXT,"
+                    + MemosColumns.MEMO_JOB_ID + " TEXT,"
+                    + MemosColumns.MEMO_SECT_ID + " TEXT,"
+                    + MemosColumns.MEMO_TEXT + " TEXT,"
+                    + MemosColumns.MEMO_STARRED + " INTEGER NOT NULL DEFAULT 0)");
+
+                version = VER_ADD_MEMOS;
         }
 
         Log.d(TAG, "after upgrade logic, at version " + version);
@@ -138,6 +163,7 @@ public class CustomerDatabase extends SQLiteOpenHelper {
 
             db.execSQL("DROP TABLE IF EXISTS " + Tables.CUSTOMERS);
             db.execSQL("DROP TABLE IF EXISTS " + Tables.JOBS);
+            db.execSQL("DROP TABLE IF EXISTS " + Tables.MEMOS);
             db.execSQL("DROP TABLE IF EXISTS " + Tables.CUSTOMERS_JOBS);
 
             onCreate(db);

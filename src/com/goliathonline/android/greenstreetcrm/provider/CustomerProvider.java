@@ -2,6 +2,7 @@ package com.goliathonline.android.greenstreetcrm.provider;
 
 import com.goliathonline.android.greenstreetcrm.provider.CustomerContract.Customers;
 import com.goliathonline.android.greenstreetcrm.provider.CustomerContract.Jobs;
+import com.goliathonline.android.greenstreetcrm.provider.CustomerContract.Memos;
 import com.goliathonline.android.greenstreetcrm.provider.CustomerDatabase.CustomersJobs;
 import com.goliathonline.android.greenstreetcrm.provider.CustomerDatabase.Tables;
 import com.goliathonline.android.greenstreetcrm.util.SelectionBuilder;
@@ -41,12 +42,17 @@ public class CustomerProvider extends ContentProvider {
     private static final int CUSTOMERS_ID = 102;
     private static final int CUSTOMERS_ID_JOBS = 103;
     private static final int CUSTOMERS_STARRED = 104;
-    
+
     private static final int JOBS = 200;
     private static final int JOBS_ID = 201;
     private static final int JOBS_STARRED = 202;
     private static final int JOBS_OPEN = 203;
     private static final int JOBS_CLOSED = 204;
+
+    private static final int MEMOS = 300;
+    private static final int MEMOS_ID = 301;
+    private static final int MEMOS_STARRED = 302;
+    private static final int MEMOS_JOB_ID = 303;
 
     /**
      * Build and return a {@link UriMatcher} that catches all {@link Uri}
@@ -60,12 +66,17 @@ public class CustomerProvider extends ContentProvider {
         matcher.addURI(authority, "customers/starred", CUSTOMERS_STARRED);
         matcher.addURI(authority, "customers/*", CUSTOMERS_ID);
         matcher.addURI(authority, "customers/*/jobs", CUSTOMERS_ID_JOBS);
-        
+
         matcher.addURI(authority, "jobs", JOBS);
         matcher.addURI(authority, "jobs/starred", JOBS_STARRED);
         matcher.addURI(authority, "jobs/open", JOBS_OPEN);
         matcher.addURI(authority, "jobs/closed", JOBS_CLOSED);
         matcher.addURI(authority, "jobs/*", JOBS_ID);
+
+        matcher.addURI(authority, "memos", MEMOS);
+        matcher.addURI(authority, "memos/starred", MEMOS_STARRED);
+        matcher.addURI(authority, "memos/job/*", MEMOS_JOB_ID);
+        matcher.addURI(authority, "memos/*", MEMOS_ID);
 
         return matcher;
     }
@@ -100,6 +111,14 @@ public class CustomerProvider extends ContentProvider {
             	return Jobs.CONTENT_TYPE;
             case JOBS_CLOSED:
             	return Jobs.CONTENT_TYPE;
+            case MEMOS:
+                return Memos.CONTENT_TYPE;
+            case MEMOS_ID:
+                return Memos.CONTENT_ITEM_TYPE;
+            case MEMOS_JOB_ID:
+                return Memos.CONTENT_TYPE;
+            case MEMOS_STARRED:
+                return Memos.CONTENT_TYPE;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -139,6 +158,11 @@ public class CustomerProvider extends ContentProvider {
             	retId = db.insertOrThrow(Tables.JOBS, null, values);
                 getContext().getContentResolver().notifyChange(uri, null);
                 return Jobs.buildJobUri(String.valueOf(retId));
+            }
+            case MEMOS: {
+                retId = db.insertOrThrow(Tables.MEMOS, null, values);
+                getContext().getContentResolver().notifyChange(uri, null);
+                return Memos.buildMemoUri(String.valueOf(retId));
             }
             case CUSTOMERS_ID_JOBS: {
                 db.insertOrThrow(Tables.CUSTOMERS_JOBS, null, values);
@@ -219,7 +243,15 @@ public class CustomerProvider extends ContentProvider {
             case JOBS_ID: {
                 final String jobId = Jobs.getJobId(uri);
                 return builder.table(Tables.JOBS)
-                        .where(Jobs._ID + "=?", jobId);
+                        .where(BaseColumns._ID + "=?", jobId);
+            }
+            case MEMOS: {
+                return builder.table(Tables.MEMOS);
+            }
+            case MEMOS_ID: {
+                final String memoId = Memos.getMemoId(uri);
+                return builder.table(Tables.MEMOS)
+                        .where(BaseColumns._ID + "=?", memoId);
             }
             case CUSTOMERS_ID_JOBS: {
                 final String customerId = Customers.getCustomerId(uri);
@@ -251,13 +283,13 @@ public class CustomerProvider extends ContentProvider {
             case CUSTOMERS_ID_JOBS: {
                 final String customerId = Customers.getCustomerId(uri);
                 return builder.table(Tables.CUSTOMERS_JOBS_JOIN_JOBS)
-                        .mapToTable(Jobs._ID, Tables.JOBS)
+                        .mapToTable(BaseColumns._ID, Tables.JOBS)
                         .mapToTable(Jobs.JOB_ID, Tables.JOBS)
                         .where(Qualified.CUSTOMERS_JOBS_CUSTOMER_ID + "=?", customerId);
             }
             case CUSTOMERS_STARRED: {
                 return builder.table(Tables.CUSTOMERS)
-                		.mapToTable(Customers._ID, Tables.CUSTOMERS)
+                		.mapToTable(BaseColumns._ID, Tables.CUSTOMERS)
                         .where(Customers.CUSTOMER_STARRED + "=1");
             }
             case JOBS: {
@@ -270,18 +302,37 @@ public class CustomerProvider extends ContentProvider {
             }
             case JOBS_STARRED: {
                 return builder.table(Tables.JOBS)
-                		.mapToTable(Jobs._ID, Tables.JOBS)
+                		.mapToTable(BaseColumns._ID, Tables.JOBS)
                         .where(Jobs.JOB_STARRED + "=1");
             }
             case JOBS_OPEN: {
             	return builder.table(Tables.JOBS)
-            			.mapToTable(Jobs._ID, Tables.JOBS)
+            			.mapToTable(BaseColumns._ID, Tables.JOBS)
             			.where(Jobs.JOB_STATUS + "=" + Jobs.Status.OPEN.getCode());
             }
             case JOBS_CLOSED: {
             	return builder.table(Tables.JOBS)
-            			.mapToTable(Jobs._ID, Tables.JOBS)
+            			.mapToTable(BaseColumns._ID, Tables.JOBS)
             			.where(Jobs.JOB_STATUS + "=" + Jobs.Status.CLOSED.getCode());
+            }
+            case MEMOS: {
+                return builder.table(Tables.MEMOS);
+            }
+            case MEMOS_ID: {
+                final String memoId = Memos.getMemoId(uri);
+                return builder.table(Tables.MEMOS)
+                        .where(BaseColumns._ID + "=?", memoId);
+            }
+            case MEMOS_JOB_ID: {
+                final String jobId = Memos.getJobId(uri);
+                return builder.table(Tables.MEMOS)
+                        .mapToTable(BaseColumns._ID, Tables.MEMOS)
+                        .where(Memos.MEMO_JOB_ID + "=?", jobId);
+            }
+            case MEMOS_STARRED: {
+                return builder.table(Tables.MEMOS)
+                        .mapToTable(BaseColumns._ID, Tables.MEMOS)
+                        .where(Memos.MEMO_STARRED + "=1");
             }
             default: {
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
@@ -298,7 +349,7 @@ public class CustomerProvider extends ContentProvider {
             }
         }
     }
-    
+
     /**
      * {@link ScheduleContract} fields that are fully qualified with a specific
      * parent {@link Tables}. Used when needed to work around SQL ambiguity.
