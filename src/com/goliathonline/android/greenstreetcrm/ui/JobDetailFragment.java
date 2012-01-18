@@ -249,6 +249,7 @@ public class JobDetailFragment extends Fragment implements
         public void onClick(View v) {
             // do something
             ContentValues values = new ContentValues();
+            values.put(Memos.MEMO_JOB_ID, Jobs.getJobId(mJobUri));
             values.put(Memos.MEMO_TEXT, mNewMemo.getText().toString().trim());
             values.put(SyncColumns.UPDATED, UIUtils.getCurrentTime());
             getActivity().getContentResolver().insert(Memos.CONTENT_URI, values);
