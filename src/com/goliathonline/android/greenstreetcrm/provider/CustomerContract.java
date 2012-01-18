@@ -119,6 +119,7 @@ public class CustomerContract {
     private static final String PATH_STARRED = "starred";
     private static final String PATH_CUSTOMERS = "customers";
     private static final String PATH_JOBS = "jobs";
+    private static final String PATH_JOB = "job";
     private static final String PATH_OPEN = "open";
     private static final String PATH_CLOSED = "closed";
     private static final String PATH_MEMOS = "memos";
@@ -251,6 +252,10 @@ public class CustomerContract {
         /** Build {@link Uri} for requested {@link #CUSTOMER_ID}. */
         public static Uri buildMemoUri(String memoId) {
             return CONTENT_URI.buildUpon().appendPath(memoId).build();
+        }
+
+        public static Uri buildMemoJobIdUri(String jobId) {
+            return CONTENT_URI.buildUpon().appendPath(PATH_JOB).appendPath(jobId).build();
         }
 
         /** Read {@link #MEMO_ID} from {@link Memos} {@link Uri}. */

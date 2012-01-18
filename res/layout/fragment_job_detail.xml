@@ -55,68 +55,83 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/job_check1" />
-        
+
         <CheckBox
             android:id="@+id/checkBox2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/job_check2" />
-        
+
         <CheckBox
             android:id="@+id/checkBox3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/job_check3" />
-        
+
         <CheckBox
             android:id="@+id/checkBox4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/job_check4" />
-        
+
         <CheckBox
             android:id="@+id/checkBox5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/job_check5" />
-        
-                <CheckBox
+
+        <CheckBox
             android:id="@+id/checkBox6"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/job_check6" />
-        
+
         <CheckBox
             android:id="@+id/checkBox7"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/job_check7" />
-        
+
         <CheckBox
             android:id="@+id/checkBox8"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/job_check8" />
-        
+
         <CheckBox
             android:id="@+id/checkBox9"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/job_check9" />
-        
+
         <CheckBox
             android:id="@+id/checkBox10"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/job_check10" />
-        
+
+        <TextView android:id="@+id/memoLabel"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/body_padding_medium"
+            android:text="Memos:"
+            style="@style/TextBody" />
+
+        <EditText android:id="@+id/newMemoEdit"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" />
+
+        <ListView android:id="@+id/memoList"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" />
+
         <TextView android:id="@+id/lastEditLabel"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/body_padding_medium"
             android:text="Last Changed:"
             style="@style/TextBody" />
-        
+
         <TextView android:id="@+id/lastEdit"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"

@@ -2,12 +2,15 @@ package com.goliathonline.android.greenstreetcrm.ui;
 
 import com.goliathonline.android.greenstreetcrm.R;
 import com.goliathonline.android.greenstreetcrm.provider.CustomerContract;
+import com.goliathonline.android.greenstreetcrm.provider.CustomerContract.Jobs;
+import com.goliathonline.android.greenstreetcrm.provider.CustomerContract.Memos;
 import com.goliathonline.android.greenstreetcrm.provider.CustomerContract.SyncColumns;
 import com.goliathonline.android.greenstreetcrm.util.FractionalTouchDelegate;
 import com.goliathonline.android.greenstreetcrm.util.NotifyingAsyncQueryHandler;
 import com.goliathonline.android.greenstreetcrm.util.UIUtils;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.RectF;
@@ -22,6 +25,9 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
+import android.widget.CursorAdapter;
+import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -53,7 +59,12 @@ public class JobDetailFragment extends Fragment implements
     private Spinner mStatus;
     private TextView mDesc;
     private TextView mLastChanged;
-    
+    private EditText mNewMemo;
+    private ListView mMemoList;
+
+    private Cursor mMemoCursor;
+    private CursorAdapter mMemoAdapter;
+
     private String mNameString;
 
     private NotifyingAsyncQueryHandler mHandler;
@@ -81,7 +92,8 @@ public class JobDetailFragment extends Fragment implements
 
         // Start background query to load job details
         mHandler = new NotifyingAsyncQueryHandler(getActivity().getContentResolver(), this);
-        mHandler.startQuery(mJobUri, JobsQuery.PROJECTION);
+        mHandler.startQuery(JobsQuery._TOKEN, mJobUri, JobsQuery.PROJECTION);
+        mHandler.startQuery(MemosQuery._TOKEN, Memos.buildMemoJobIdUri(Jobs.getJobId(mJobUri)), MemosQuery.PROJECTION);
     }
 
     @Override
@@ -99,7 +111,7 @@ public class JobDetailFragment extends Fragment implements
         // Larger target triggers star toggle
         final View starParent = mRootView.findViewById(R.id.header_job);
         FractionalTouchDelegate.setupDelegate(starParent, mStarred, new RectF(0.6f, 0f, 1f, 0.8f));
-        
+
         mCheck1 = (CompoundButton) mRootView.findViewById(R.id.checkBox1);
         mCheck2 = (CompoundButton) mRootView.findViewById(R.id.checkBox2);
         mCheck3 = (CompoundButton) mRootView.findViewById(R.id.checkBox3);
@@ -118,9 +130,15 @@ public class JobDetailFragment extends Fragment implements
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mStatus.setAdapter(adapter);
         mStatus.setOnItemSelectedListener(statusChanged);
-        
+
         mDesc = (TextView) mRootView.findViewById(R.id.job_desc);
         mLastChanged = (TextView) mRootView.findViewById(R.id.lastEdit);
+
+        mNewMemo = (EditText) mRootView.findViewById(R.id.newMemoEdit);
+        mMemoList = (ListView) mRootView.findViewById(R.id.memoList);
+
+        mMemoAdapter = new MemosAdapter(getActivity());
+        mMemoList.setAdapter(mMemoAdapter);
 
         return mRootView;
     }
@@ -133,6 +151,18 @@ public class JobDetailFragment extends Fragment implements
             return;
         }
 
+        if (token == JobsQuery._TOKEN) {
+            onJobQueryComplete(cursor);
+        } else if (token == MemosQuery._TOKEN) {
+            onMemoQueryComplete(cursor);
+        } else {
+            if (cursor != null)
+                cursor.close();
+        }
+    }
+
+    public void onJobQueryComplete(Cursor cursor)
+    {
         try {
             if (!cursor.moveToFirst()) {
                 return;
@@ -146,43 +176,43 @@ public class JobDetailFragment extends Fragment implements
             mStarred.setOnCheckedChangeListener(null);
             mStarred.setChecked(cursor.getInt(JobsQuery.STARRED) != 0);
             mStarred.setOnCheckedChangeListener(this);
-            
+
             mCheck1.setOnCheckedChangeListener(null);
             mCheck1.setChecked(cursor.getInt(JobsQuery.STEP1) != 0);
             mCheck1.setOnCheckedChangeListener(this);
-            
+
             mCheck2.setOnCheckedChangeListener(null);
             mCheck2.setChecked(cursor.getInt(JobsQuery.STEP2) != 0);
             mCheck2.setOnCheckedChangeListener(this);
-            
+
             mCheck3.setOnCheckedChangeListener(null);
             mCheck3.setChecked(cursor.getInt(JobsQuery.STEP3) != 0);
             mCheck3.setOnCheckedChangeListener(this);
-            
+
             mCheck4.setOnCheckedChangeListener(null);
             mCheck4.setChecked(cursor.getInt(JobsQuery.STEP4) != 0);
             mCheck4.setOnCheckedChangeListener(this);
-            
+
             mCheck5.setOnCheckedChangeListener(null);
             mCheck5.setChecked(cursor.getInt(JobsQuery.STEP5) != 0);
             mCheck5.setOnCheckedChangeListener(this);
-            
+
             mCheck6.setOnCheckedChangeListener(null);
             mCheck6.setChecked(cursor.getInt(JobsQuery.STEP6) != 0);
             mCheck6.setOnCheckedChangeListener(this);
-            
+
             mCheck7.setOnCheckedChangeListener(null);
             mCheck7.setChecked(cursor.getInt(JobsQuery.STEP7) != 0);
             mCheck7.setOnCheckedChangeListener(this);
-            
+
             mCheck8.setOnCheckedChangeListener(null);
             mCheck8.setChecked(cursor.getInt(JobsQuery.STEP8) != 0);
             mCheck8.setOnCheckedChangeListener(this);
-            
+
             mCheck9.setOnCheckedChangeListener(null);
             mCheck9.setChecked(cursor.getInt(JobsQuery.STEP9) != 0);
             mCheck9.setOnCheckedChangeListener(this);
-            
+
             mCheck10.setOnCheckedChangeListener(null);
             mCheck10.setChecked(cursor.getInt(JobsQuery.STEP10) != 0);
             mCheck10.setOnCheckedChangeListener(this);
@@ -194,6 +224,20 @@ public class JobDetailFragment extends Fragment implements
         } finally {
             cursor.close();
         }
+    }
+
+    public void onMemoQueryComplete(Cursor cursor)
+    {
+        if (mMemoCursor != null) {
+            // In case cancelOperation() doesn't work and we end up with consecutive calls to this
+            // callback.
+            getActivity().stopManagingCursor(mMemoCursor);
+            mMemoCursor = null;
+        }
+
+        mMemoCursor = cursor;
+        getActivity().startManagingCursor(mMemoCursor);
+        mMemoAdapter.changeCursor(mMemoCursor);
     }
 
     /**
@@ -227,7 +271,7 @@ public class JobDetailFragment extends Fragment implements
         	values.put(CustomerContract.SyncColumns.UPDATED, UIUtils.getCurrentTime());
         mHandler.startUpdate(mJobUri, values);
     }
-    
+
     private OnItemSelectedListener statusChanged = new OnItemSelectedListener() {
     	public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3)
     	{
@@ -237,9 +281,29 @@ public class JobDetailFragment extends Fragment implements
     		values.put(CustomerContract.SyncColumns.UPDATED, UIUtils.getCurrentTime());
     		mHandler.startUpdate(mJobUri, values);
     	}
-    	
+
     	public void onNothingSelected(AdapterView<?> arg0) {}
     };
+
+    private class MemosAdapter extends CursorAdapter {
+        public MemosAdapter(Context context) {
+            super(context, null);
+        }
+
+        /** {@inheritDoc} */
+        @Override
+        public View newView(Context context, Cursor cursor, ViewGroup parent) {
+            return getActivity().getLayoutInflater().inflate(R.layout.list_item_customer_oneline,
+                    parent, false);
+        }
+
+        /** {@inheritDoc} */
+        @Override
+        public void bindView(View view, Context context, Cursor cursor) {
+            ((TextView) view.findViewById(R.id.customer_name)).setText(
+                    cursor.getString(JobsQuery.JOB_ID));
+        }
+    }
 
     /**
      * {@link com.goliathonline.android.greenstreetcrm.provider.CustomerContract.Jobs} query parameters.
@@ -284,5 +348,19 @@ public class JobDetailFragment extends Fragment implements
         int STEP10 = 14;
         int STARRED = 15;
         int UPDATED = 16;
+    }
+
+    private interface MemosQuery {
+        int _TOKEN = 0x2;
+
+        String[] PROJECTION = {
+            BaseColumns._ID,
+            CustomerContract.Memos.MEMO_TEXT,
+            SyncColumns.UPDATED,
+        };
+
+        int _ID = 0;
+        int MEMO_TEXT = 1;
+        int UPDATED = 2;
     }
 }
