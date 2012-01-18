@@ -20,10 +20,12 @@ import android.provider.BaseColumns;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.CursorAdapter;
 import android.widget.EditText;
@@ -60,6 +62,7 @@ public class JobDetailFragment extends Fragment implements
     private TextView mDesc;
     private TextView mLastChanged;
     private EditText mNewMemo;
+    private Button mNewMemoButton;
     private ListView mMemoList;
 
     private Cursor mMemoCursor;
@@ -135,6 +138,8 @@ public class JobDetailFragment extends Fragment implements
         mLastChanged = (TextView) mRootView.findViewById(R.id.lastEdit);
 
         mNewMemo = (EditText) mRootView.findViewById(R.id.newMemoEdit);
+        mNewMemoButton = (Button) mRootView.findViewById(R.id.newMemoButton);
+        mNewMemoButton.setOnClickListener(mOnAddMemoClick);
         mMemoList = (ListView) mRootView.findViewById(R.id.memoList);
 
         mMemoAdapter = new MemosAdapter(getActivity());
@@ -239,6 +244,17 @@ public class JobDetailFragment extends Fragment implements
         getActivity().startManagingCursor(mMemoCursor);
         mMemoAdapter.changeCursor(mMemoCursor);
     }
+
+    private OnClickListener mOnAddMemoClick = new OnClickListener() {
+        public void onClick(View v) {
+            // do something
+            ContentValues values = new ContentValues();
+            values.put(Memos.MEMO_TEXT, mNewMemo.getText().toString().trim());
+            values.put(SyncColumns.UPDATED, UIUtils.getCurrentTime());
+            getActivity().getContentResolver().insert(Memos.CONTENT_URI, values);
+            mNewMemo.setText("");
+        }
+    };
 
     /**
      * Handle toggling of starred checkbox.
