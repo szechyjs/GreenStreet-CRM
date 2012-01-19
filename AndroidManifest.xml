@@ -2,12 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.goliathonline.android.greenstreetcrm"
     android:versionCode="1"
-    android:versionName="1.0"
+    android:versionName="0.1.0"
     android:installLocation="auto" >
 
     <uses-sdk android:minSdkVersion="10"
         android:targetSdkVersion="13" />
-    
+
     <permission
         android:name="com.goliathonline.android.greenstreetcrm.permission.WRITE_CUSTOMERS"
         android:protectionLevel="normal"
@@ -22,9 +22,9 @@
         android:label="@string/app_name"
         android:theme="@style/Theme.IOSched"
         android:hardwareAccelerated="true" >
-        
+
         <!-- Activities for both phones and tablets -->
-        
+
         <activity
             android:label="@string/app_name"
             android:name=".ui.HomeActivity"
@@ -34,13 +34,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        
+
         <activity
             android:name=".ui.StarredActivity"
             android:label="@string/title_starred" />
-        
+
         <!-- Phone-only activities -->
-        
+
         <activity
             android:name=".ui.phone.CustomersActivity"
             android:label="Customers">
@@ -59,9 +59,9 @@
                 <data android:mimeType="vnd.android.cursor.item/vnd.greenstreetcrm.customer" />
             </intent-filter>
         </activity>
-        
+
         <activity android:name=".ui.phone.CustomerEditActivity" />
-        
+
         <activity
             android:name=".ui.phone.JobsActivity"
             android:label="Jobs">
@@ -72,7 +72,7 @@
                 <data android:mimeType="vnd.android.cursor.dir/vnd.greenstreetcrm.job" />
             </intent-filter>
         </activity>
-        
+
         <activity android:name=".ui.phone.JobDetailActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -80,26 +80,26 @@
                 <data android:mimeType="vnd.android.cursor.item/vnd.greenstreetcrm.job" />
             </intent-filter>
         </activity>
-        
+
         <activity android:name=".ui.phone.JobEditActivity" />
-        
+
         <!-- Tablet-only activities -->
-        
+
         <activity
             android:name=".ui.tablet.CustomersMultiPaneActivity"
             android:label="Customers" />
-        
+
         <activity
             android:name=".ui.tablet.JobsMultiPaneActivity"
             android:label="Jobs" />
-        
+
         <!-- Other manifest items -->
-        
+
         <provider
             android:name=".provider.CustomerProvider"
             android:authorities="com.goliathonline.android.greenstreetcrm"
             android:writePermission="com.goliathonline.android.greenstreetcrm.permission.WRITE_CUSTOMERS" />
-        
+
     </application>
 
 </manifest>
