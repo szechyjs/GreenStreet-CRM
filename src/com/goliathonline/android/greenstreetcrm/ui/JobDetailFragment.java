@@ -96,7 +96,8 @@ public class JobDetailFragment extends Fragment implements
         // Start background query to load job details
         mHandler = new NotifyingAsyncQueryHandler(getActivity().getContentResolver(), this);
         mHandler.startQuery(JobsQuery._TOKEN, mJobUri, JobsQuery.PROJECTION);
-        mHandler.startQuery(MemosQuery._TOKEN, Memos.buildMemoJobIdUri(Jobs.getJobId(mJobUri)), MemosQuery.PROJECTION);
+        mHandler.startQuery(MemosQuery._TOKEN, null, Memos.buildMemoJobIdUri(Jobs.getJobId(mJobUri)),
+                    MemosQuery.PROJECTION, null, null, CustomerContract.Memos.DEFAULT_SORT);
     }
 
     @Override
@@ -262,7 +263,8 @@ public class JobDetailFragment extends Fragment implements
     		mHandler.startUpdate(mJobUri, values);
 
             // Requery memos
-            mHandler.startQuery(MemosQuery._TOKEN, Memos.buildMemoJobIdUri(Jobs.getJobId(mJobUri)), MemosQuery.PROJECTION);
+            mHandler.startQuery(MemosQuery._TOKEN, null, Memos.buildMemoJobIdUri(Jobs.getJobId(mJobUri)),
+                    MemosQuery.PROJECTION, null, null, CustomerContract.Memos.DEFAULT_SORT);
         }
     };
 

@@ -246,7 +246,7 @@ public class CustomerContract {
                 "vnd.android.cursor.item/vnd.greenstreetcrm.memo";
 
         /** Default "ORDER BY" clause. */
-        public static final String DEFAULT_SORT = MemosColumns.MEMO_ID
+        public static final String DEFAULT_SORT = BaseColumns._ID
                 + " COLLATE NOCASE DESC";
 
         /** Build {@link Uri} for requested {@link #CUSTOMER_ID}. */
