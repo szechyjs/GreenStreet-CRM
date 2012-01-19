@@ -247,7 +247,7 @@ public class CustomerContract {
 
         /** Default "ORDER BY" clause. */
         public static final String DEFAULT_SORT = MemosColumns.MEMO_ID
-                + " COLLATE NOCASE ASC";
+                + " COLLATE NOCASE DESC";
 
         /** Build {@link Uri} for requested {@link #CUSTOMER_ID}. */
         public static Uri buildMemoUri(String memoId) {
