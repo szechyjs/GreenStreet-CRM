@@ -243,6 +243,7 @@ public class JobDetailFragment extends Fragment implements
         mMemoCursor = cursor;
         getActivity().startManagingCursor(mMemoCursor);
         mMemoAdapter.changeCursor(mMemoCursor);
+        UIUtils.setListViewHeightBasedOnChildren(mMemoList);
     }
 
     private OnClickListener mOnAddMemoClick = new OnClickListener() {
@@ -254,7 +255,7 @@ public class JobDetailFragment extends Fragment implements
             values.put(SyncColumns.UPDATED, UIUtils.getCurrentTime());
             getActivity().getContentResolver().insert(Memos.CONTENT_URI, values);
             mNewMemo.setText("");
-            
+
             values.clear();
             values.put(CustomerContract.SyncColumns.UPDATED, UIUtils.getCurrentTime());
     		mHandler.startUpdate(mJobUri, values);
@@ -323,7 +324,7 @@ public class JobDetailFragment extends Fragment implements
         public void bindView(View view, Context context, Cursor cursor) {
             ((TextView) view.findViewById(R.id.memo_text)).setText(
                     cursor.getString(MemosQuery.MEMO_TEXT));
-            
+
             ((TextView) view.findViewById(R.id.memo_timestamp)).setText(
                     UIUtils.formatTime(cursor.getLong(MemosQuery.UPDATED), context));
         }
