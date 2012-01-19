@@ -4,13 +4,11 @@
     style="@style/SimpleListItem">
 
         <TextView android:id="@+id/memo_text"
-            android:layout_gravity="center_vertical"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             style="@style/TextBody" />
 
         <TextView android:id="@+id/memo_timestamp"
-            android:layout_gravity="center_vertical"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             style="@style/ListItemSubtitle" />
