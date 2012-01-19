@@ -248,7 +248,7 @@ public class JobDetailFragment extends Fragment implements
 
     private OnClickListener mOnAddMemoClick = new OnClickListener() {
         public void onClick(View v) {
-            // do something
+            // Add new memo
             ContentValues values = new ContentValues();
             values.put(Memos.MEMO_JOB_ID, Jobs.getJobId(mJobUri));
             values.put(Memos.MEMO_TEXT, mNewMemo.getText().toString().trim());
@@ -256,9 +256,13 @@ public class JobDetailFragment extends Fragment implements
             getActivity().getContentResolver().insert(Memos.CONTENT_URI, values);
             mNewMemo.setText("");
 
+            // Update job's timestamp
             values.clear();
             values.put(CustomerContract.SyncColumns.UPDATED, UIUtils.getCurrentTime());
     		mHandler.startUpdate(mJobUri, values);
+
+            // Requery memos
+            mHandler.startQuery(MemosQuery._TOKEN, Memos.buildMemoJobIdUri(Jobs.getJobId(mJobUri)), MemosQuery.PROJECTION);
         }
     };
 
