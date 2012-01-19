@@ -1,0 +1,18 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="?android:attr/listPreferredItemHeight"
+    style="@style/ListItemContainer">
+
+        <TextView android:id="@+id/memo_text"
+            android:layout_gravity="center_vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            style="@style/ListItemContent" />
+        
+        <TextView android:id="@+id/memo_timestamp"
+            android:layout_gravity="center_vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            style="@style/ListItemContent" />
+
+</LinearLayout>
