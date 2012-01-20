@@ -40,11 +40,13 @@ public class HomeActivity extends BaseActivity {
 	
 	@Override
 	protected void onResume() {
+		super.onResume();
 		mPushLink.start();
 	}
 	
 	@Override
 	protected void onPause() {
+		super.onPause();
 		mPushLink.stop();
 	}
 }
