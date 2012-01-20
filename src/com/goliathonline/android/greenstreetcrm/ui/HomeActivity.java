@@ -27,10 +27,10 @@ public class HomeActivity extends BaseActivity {
 		setContentView(R.layout.activity_home);
 
 		BugSenseHandler.setup(this, "fd8c0e92");
-		
+
 		getActivityHelper().setupActionBar(null, 0);
-		
-		final Intent intent = new Intent(Intent.ACTION_SYNC, null, this, UpdateService.class);
+
+		final Intent intent = new Intent(this, UpdateService.class);
         startService(intent);
 	}
 
@@ -39,7 +39,7 @@ public class HomeActivity extends BaseActivity {
         super.onPostCreate(savedInstanceState);
         getActivityHelper().setupHomeActivity();
     }
-	
+
 	@Override
 	protected void onResume() {
 		super.onResume();
