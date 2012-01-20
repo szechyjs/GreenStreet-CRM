@@ -9,8 +9,10 @@ import com.goliathonline.android.greenstreetcrm.util.FractionalTouchDelegate;
 import com.goliathonline.android.greenstreetcrm.util.NotifyingAsyncQueryHandler;
 import com.goliathonline.android.greenstreetcrm.util.UIUtils;
 
+import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.RectF;
@@ -18,11 +20,16 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.BaseColumns;
 import android.support.v4.app.Fragment;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -142,6 +149,7 @@ public class JobDetailFragment extends Fragment implements
         mNewMemoButton = (Button) mRootView.findViewById(R.id.newMemoButton);
         mNewMemoButton.setOnClickListener(mOnAddMemoClick);
         mMemoList = (ListView) mRootView.findViewById(R.id.memoList);
+        registerForContextMenu(mMemoList);
 
         mMemoAdapter = new MemosAdapter(getActivity());
         mMemoList.setAdapter(mMemoAdapter);
@@ -312,6 +320,45 @@ public class JobDetailFragment extends Fragment implements
 
     	public void onNothingSelected(AdapterView<?> arg0) {}
     };
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        MenuInflater inflater = getActivity().getMenuInflater();
+        inflater.inflate(R.menu.context_memos, menu);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+      AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
+
+      final Cursor cursor = (Cursor)mMemoAdapter.getItem(info.position);
+      final String memoId = cursor.getString(MemosQuery._ID);
+      final Uri memoUri = CustomerContract.Memos.buildMemoUri(memoId);
+
+      switch (item.getItemId()) {
+      case R.id.delete:
+          AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+          builder.setMessage("Are you sure you want to delete?")
+               .setCancelable(false)
+               .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                   public void onClick(DialogInterface dialog, int id) {
+                     getActivity().getContentResolver().delete(memoUri, null, null);
+                     dialog.dismiss();
+                   }
+               })
+               .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                   public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                   }
+               });
+          AlertDialog alert = builder.create();
+          alert.show();
+          return true;
+      default:
+        return super.onContextItemSelected(item);
+      }
+    }
 
     private class MemosAdapter extends CursorAdapter {
         public MemosAdapter(Context context) {
