@@ -1,11 +1,13 @@
 package com.goliathonline.android.greenstreetcrm.ui;
 
 import com.goliathonline.android.greenstreetcrm.R;
-
-import com.bugsense.trace.BugSenseHandler;
+import com.goliathonline.android.greenstreetcrm.service.UpdateService;
 import com.pushlink.android.PushLink;
 
+import com.bugsense.trace.BugSenseHandler;
+
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 
 /**
@@ -17,8 +19,6 @@ import android.os.Bundle;
  */
 public class HomeActivity extends BaseActivity {
 	private static final String TAG = "HomeActivity";
-	
-	private PushLink mPushLink;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -27,9 +27,11 @@ public class HomeActivity extends BaseActivity {
 		setContentView(R.layout.activity_home);
 
 		BugSenseHandler.setup(this, "fd8c0e92");
-		mPushLink = new PushLink(this, R.drawable.ic_launcher, 10, "63f9131513fa3991");
-
+		
 		getActivityHelper().setupActionBar(null, 0);
+		
+		final Intent intent = new Intent(Intent.ACTION_SYNC, null, this, UpdateService.class);
+        startService(intent);
 	}
 
 	@Override
@@ -41,12 +43,6 @@ public class HomeActivity extends BaseActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		mPushLink.start();
-	}
-	
-	@Override
-	protected void onPause() {
-		super.onPause();
-		mPushLink.stop();
+		PushLink.setCurrentPopUpTarget(this);
 	}
 }
