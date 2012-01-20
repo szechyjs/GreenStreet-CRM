@@ -17,6 +17,8 @@ import android.os.Bundle;
  */
 public class HomeActivity extends BaseActivity {
 	private static final String TAG = "HomeActivity";
+	
+	private PushLink mPushLink;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -25,7 +27,7 @@ public class HomeActivity extends BaseActivity {
 		setContentView(R.layout.activity_home);
 
 		BugSenseHandler.setup(this, "fd8c0e92");
-        PushLink pushLink = new PushLink(this, R.drawable.ic_launcher, 10, "63f9131513fa3991");
+		mPushLink = new PushLink(this, R.drawable.ic_launcher, 10, "63f9131513fa3991");
 
 		getActivityHelper().setupActionBar(null, 0);
 	}
@@ -35,4 +37,14 @@ public class HomeActivity extends BaseActivity {
         super.onPostCreate(savedInstanceState);
         getActivityHelper().setupHomeActivity();
     }
+	
+	@Override
+	protected void onResume() {
+		mPushLink.start();
+	}
+	
+	@Override
+	protected void onPause() {
+		mPushLink.stop();
+	}
 }
