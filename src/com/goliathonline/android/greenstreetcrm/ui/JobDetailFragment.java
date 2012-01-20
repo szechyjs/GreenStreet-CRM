@@ -345,6 +345,10 @@ public class JobDetailFragment extends Fragment implements
                    public void onClick(DialogInterface dialog, int id) {
                      getActivity().getContentResolver().delete(memoUri, null, null);
                      dialog.dismiss();
+
+                    // Requery memos
+                    mHandler.startQuery(MemosQuery._TOKEN, null, Memos.buildMemoJobIdUri(Jobs.getJobId(mJobUri)),
+                    MemosQuery.PROJECTION, null, null, CustomerContract.Memos.DEFAULT_SORT);
                    }
                })
                .setNegativeButton("No", new DialogInterface.OnClickListener() {
