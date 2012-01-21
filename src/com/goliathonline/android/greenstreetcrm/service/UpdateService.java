@@ -21,6 +21,7 @@ public class UpdateService extends IntentService {
 		
 		mPushLink = new PushLink(this, R.drawable.ic_launcher, 10, "63f9131513fa3991");
 		mPushLink.start();
+		Log.d(TAG, "PushLink started.");
 	}
 
 	@Override
@@ -33,6 +34,7 @@ public class UpdateService extends IntentService {
 	public void onDestroy() {
 		super.onDestroy();
 		mPushLink.stop();
+		Log.d(TAG, "PushLink stopped.");
 	}
 
 }
