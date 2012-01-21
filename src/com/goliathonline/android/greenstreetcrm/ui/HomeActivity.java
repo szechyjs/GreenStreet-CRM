@@ -1,13 +1,9 @@
 package com.goliathonline.android.greenstreetcrm.ui;
 
 import com.goliathonline.android.greenstreetcrm.R;
-import com.goliathonline.android.greenstreetcrm.service.UpdateService;
-import com.pushlink.android.PushLink;
-
 import com.bugsense.trace.BugSenseHandler;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 
 /**
@@ -29,9 +25,6 @@ public class HomeActivity extends BaseActivity {
 		BugSenseHandler.setup(this, "fd8c0e92");
 
 		getActivityHelper().setupActionBar(null, 0);
-
-		final Intent intent = new Intent(this, UpdateService.class);
-        startService(intent);
 	}
 
 	@Override
@@ -39,10 +32,4 @@ public class HomeActivity extends BaseActivity {
         super.onPostCreate(savedInstanceState);
         getActivityHelper().setupHomeActivity();
     }
-
-	@Override
-	protected void onResume() {
-		super.onResume();
-		PushLink.setCurrentPopUpTarget(this);
-	}
 }

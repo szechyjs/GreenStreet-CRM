@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.goliathonline.android.greenstreetcrm"
-    android:versionCode="9"
-    android:versionName="0.2.6"
+    android:versionCode="13"
+    android:versionName="0.3.3"
     android:installLocation="auto" >
 
     <uses-sdk android:minSdkVersion="10"
@@ -18,6 +18,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
+        android:name=".service.PushLinkSetup"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/Theme.IOSched"
@@ -94,8 +95,6 @@
             android:label="Jobs" />
 
         <!-- Other manifest items -->
-
-        <service android:name=".service.UpdateService" />
 
         <provider
             android:name=".provider.CustomerProvider"
