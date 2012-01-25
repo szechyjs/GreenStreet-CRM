@@ -2,15 +2,19 @@ package com.goliathonline.android.greenstreetcrm.util;
 
 import com.goliathonline.android.greenstreetcrm.provider.CustomerContract.Jobs.Status;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Build;
+import android.provider.MediaStore;
 import android.text.Html;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
@@ -160,4 +164,23 @@ public class UIUtils {
         listView.setLayoutParams(params);
         listView.requestLayout();
     }
+    
+    public static String parseUriToFilename(Uri uri, Activity activity) {
+    	  String selectedImagePath = null;
+    	  String filemanagerPath = uri.getPath();
+
+    	  String[] projection = { MediaStore.Images.Media.DATA };
+    	  Cursor cursor =  activity.managedQuery(uri, projection, null, null, null);
+
+    	  if (cursor != null) {
+    	    // Here you will get a null pointer if cursor is null
+    	    // This can be if you used OI file manager for picking the media
+    	    int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+    	    cursor.moveToFirst();
+    	    selectedImagePath = cursor.getString(column_index);
+    	  }
+
+    	  return selectedImagePath;
+
+    	} 
 }

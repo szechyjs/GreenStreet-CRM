@@ -43,8 +43,11 @@ public class JobsFragment extends ListFragment implements
 
     private static final String STATE_CHECKED_POSITION = "checkedPosition";
 
+    private Bundle mExtras;
     private Cursor mCursor;
     private CursorAdapter mAdapter;
+    private String mAction;
+    private Uri mJobUri;
     private int mCheckedPosition = -1;
     private boolean mHasSetEmptyText = false;
     private final int mJobQueryToken = JobsQuery._TOKEN;
@@ -57,9 +60,8 @@ public class JobsFragment extends ListFragment implements
         super.onCreate(savedInstanceState);
         mHandler = new NotifyingAsyncQueryHandler(getActivity().getContentResolver(), this);
         reloadFromArguments(getArguments());
-        
-        final Uri uri = getArguments().getParcelable("_uri");
-        if (!uri.getLastPathSegment().equals("starred"))
+
+        if (!mJobUri.getLastPathSegment().equals("starred"))
         {
         	setHasOptionsMenu(true);
         
@@ -76,6 +78,18 @@ public class JobsFragment extends ListFragment implements
 	        actionbar.addTab(closed);
         }
         
+        // if this is from the share menu
+        if (Intent.ACTION_SEND.equals(mAction)) {
+        	if (mExtras.containsKey(Intent.EXTRA_STREAM)) {
+        		// Get resource path
+        		Uri extraUri = (Uri) mExtras.getParcelable(Intent.EXTRA_STREAM);
+        		String filename = UIUtils.parseUriToFilename(extraUri, getActivity());
+        		
+        		if (filename.isEmpty()) {
+        			//moustachify(filename, null);
+        		}
+        	}
+        }
     }
 
     public void reloadFromArguments(Bundle arguments) {
@@ -92,18 +106,21 @@ public class JobsFragment extends ListFragment implements
 
         // Load new arguments
         final Intent intent = BaseActivity.fragmentArgumentsToIntent(arguments);
-        final Uri jobsUri = intent.getData();
+        mJobUri = intent.getData();
 
-        if (jobsUri == null) {
-            return;
+        if (mJobUri == null) {
+        	mJobUri = Jobs.CONTENT_URI;
         }
+        
+        mExtras = intent.getExtras();
+        mAction = intent.getAction();
 
         mAdapter = new JobsAdapter(getActivity());
 
         setListAdapter(mAdapter);
 
         // Start background query to load jobs
-        mHandler.startQuery(mJobQueryToken, null, jobsUri, mJobProjection, null, null,
+        mHandler.startQuery(mJobQueryToken, null, mJobUri, mJobProjection, null, null,
                 CustomerContract.Jobs.DEFAULT_SORT);
     }
 
