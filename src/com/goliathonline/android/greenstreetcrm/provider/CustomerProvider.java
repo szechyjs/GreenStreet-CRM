@@ -151,22 +151,22 @@ public class CustomerProvider extends ContentProvider {
         switch (match) {
             case CUSTOMERS: {
                 retId = db.insertOrThrow(Tables.CUSTOMERS, null, values);
-                getContext().getContentResolver().notifyChange(uri, null);
+                getContext().getContentResolver().notifyChange(uri, null, true);
                 return Customers.buildCustomerUri(String.valueOf(retId));
             }
             case JOBS: {
             	retId = db.insertOrThrow(Tables.JOBS, null, values);
-                getContext().getContentResolver().notifyChange(uri, null);
+                getContext().getContentResolver().notifyChange(uri, null, true);
                 return Jobs.buildJobUri(String.valueOf(retId));
             }
             case MEMOS: {
                 retId = db.insertOrThrow(Tables.MEMOS, null, values);
-                getContext().getContentResolver().notifyChange(uri, null);
+                getContext().getContentResolver().notifyChange(uri, null, true);
                 return Memos.buildMemoUri(String.valueOf(retId));
             }
             case CUSTOMERS_ID_JOBS: {
                 db.insertOrThrow(Tables.CUSTOMERS_JOBS, null, values);
-                getContext().getContentResolver().notifyChange(uri, null);
+                getContext().getContentResolver().notifyChange(uri, null, true);
                 return Jobs.buildJobUri(values.getAsString(CustomersJobs.JOB_ID));
             }
             default: {
@@ -182,7 +182,7 @@ public class CustomerProvider extends ContentProvider {
         final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
         final SelectionBuilder builder = buildSimpleSelection(uri);
         int retVal = builder.where(selection, selectionArgs).update(db, values);
-        getContext().getContentResolver().notifyChange(uri, null);
+        getContext().getContentResolver().notifyChange(uri, null, true);
         return retVal;
     }
 
@@ -193,7 +193,7 @@ public class CustomerProvider extends ContentProvider {
         final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
         final SelectionBuilder builder = buildSimpleSelection(uri);
         int retVal = builder.where(selection, selectionArgs).delete(db);
-        getContext().getContentResolver().notifyChange(uri, null);
+        getContext().getContentResolver().notifyChange(uri, null, true);
         return retVal;
     }
 

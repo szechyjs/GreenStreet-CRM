@@ -120,7 +120,8 @@
         <provider
             android:name=".provider.CustomerProvider"
             android:authorities="com.goliathonline.android.greenstreetcrm"
-            android:writePermission="com.goliathonline.android.greenstreetcrm.permission.WRITE_CUSTOMERS" />
+            android:writePermission="com.goliathonline.android.greenstreetcrm.permission.WRITE_CUSTOMERS"
+            android:syncable="true" />
 
         <service
             android:name=".service.SyncService"

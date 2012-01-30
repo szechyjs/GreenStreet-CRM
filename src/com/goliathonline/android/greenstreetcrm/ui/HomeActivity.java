@@ -21,8 +21,6 @@ public class HomeActivity extends BaseActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
-		startAccountSelectorIfNecessary();
 
 		setContentView(R.layout.activity_home);
 
@@ -30,7 +28,7 @@ public class HomeActivity extends BaseActivity {
 
 		getActivityHelper().setupActionBar(null, 0);
 		
-		//ContentResolver.setIsSyncable(account, "net.gfxmonk.android.pagefeed", 1)
+		startAccountSelectorIfNecessary();
 	}
 
 	@Override

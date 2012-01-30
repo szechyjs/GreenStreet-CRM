@@ -8,25 +8,33 @@ import com.goliathonline.android.greenstreetcrm.provider.CustomerContract;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.app.ListActivity;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
-public class AccountList extends ListActivity {
+public class AccountList extends BaseActivity {
 	
 	private static Account[] accounts;
+	private ListView mListView;
+	private TextView mNoAccounts;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
+		getActivityHelper().setupActionBar(null, 0);
+		
 		AccountManager accountManager = AccountManager.get(getApplicationContext());
 		accounts = accountManager.getAccountsByType(CustomerContract.ACCOUNT_TYPE);
 		setContentView(R.layout.account_list);
+		mListView = (ListView) findViewById(R.id.account_list);
+		mNoAccounts = (TextView) findViewById(R.id.empty_account_list);
 
 		if (accounts.length > 0) {
 			String[] names = new String[accounts.length];
@@ -35,20 +43,24 @@ public class AccountList extends ListActivity {
 				names[i] = account.name;
 				i++;
 			}
-			this.setListAdapter(new ArrayAdapter<String>(this, R.layout.list_item_account, names));
+			mNoAccounts.setVisibility(View.GONE);
+			mListView.setAdapter(new ArrayAdapter<String>(this, R.layout.list_item_account, names));
+			mListView.setOnItemClickListener(onClick);
 		}
 	}
 	
-	@Override
-	protected void onListItemClick(ListView l, View v, int position, long id) {
-		Account account = accounts[position];
-		setSync(account, true, getApplicationContext());
-		for (int i = 0; i < accounts.length; i++) {
-			if (accounts[i] != account)
-				ContentResolver.setIsSyncable(accounts[i], CustomerContract.CONTENT_AUTHORITY, 0);
+	OnItemClickListener onClick = new OnItemClickListener(){
+		public void onItemClick(AdapterView<?> l, View v, int pos,
+				long id) {
+			Account account = accounts[pos];
+			setSync(account, true, getApplicationContext());
+			for (int i = 0; i < accounts.length; i++) {
+				if (accounts[i] != account)
+					ContentResolver.setIsSyncable(accounts[i], CustomerContract.CONTENT_AUTHORITY, 0);
+			}
+			finish();
 		}
-		finish();
-	}
+	};
 
 	public static Account singleEnabledAccount(Context context) {
 		AccountManager accountManager = AccountManager.get(context);
