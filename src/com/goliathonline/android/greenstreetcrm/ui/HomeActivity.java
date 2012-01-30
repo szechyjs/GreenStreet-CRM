@@ -4,6 +4,8 @@ import com.goliathonline.android.greenstreetcrm.R;
 import com.bugsense.trace.BugSenseHandler;
 
 import android.app.Activity;
+import android.content.ContentResolver;
+import android.content.Intent;
 import android.os.Bundle;
 
 /**
@@ -19,12 +21,16 @@ public class HomeActivity extends BaseActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		startAccountSelectorIfNecessary();
 
 		setContentView(R.layout.activity_home);
 
 		BugSenseHandler.setup(this, "fd8c0e92");
 
 		getActivityHelper().setupActionBar(null, 0);
+		
+		//ContentResolver.setIsSyncable(account, "net.gfxmonk.android.pagefeed", 1)
 	}
 
 	@Override
@@ -32,4 +38,11 @@ public class HomeActivity extends BaseActivity {
         super.onPostCreate(savedInstanceState);
         getActivityHelper().setupHomeActivity();
     }
+	
+	private void startAccountSelectorIfNecessary() {
+		if (AccountList.singleEnabledAccount(getApplicationContext()) == null) {
+			Intent intent = new Intent(this, AccountList.class);
+			startActivity(intent);
+		}
+	}
 }

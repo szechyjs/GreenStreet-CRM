@@ -113,6 +113,7 @@ public class CustomerContract {
     }
 
     public static final String CONTENT_AUTHORITY = "com.goliathonline.android.greenstreetcrm";
+    public static final String ACCOUNT_TYPE = "com.google";
 
     private static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
 
